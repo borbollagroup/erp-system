@@ -1,0 +1,551 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotation Details {{ folio }}</title>
+
+        <style>
+            @page {
+                size: letter portrait; /* Letter paper size in portrait mode */
+                margin: 20mm; /* Consistent margin for all printers */
+            }
+
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f9f9f9;
+                color: #333;
+            }
+
+            /* Header section */
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px 20px;
+                background-color: #004085;
+                color: white;
+                border-bottom: 2px solid #002654;
+            }
+
+            .header img {
+                height: 50px;
+                margin-left: 30px;
+            }
+
+            .header .title {
+                font-size: 1.8em;
+                font-weight: bold;
+                text-align: center;
+                flex-grow: 1;
+                margin: 0;
+                color: white;
+            }
+
+            .header .folio {
+                font-size: 1em;
+                font-weight: bold;
+                color: white;
+                margin-right: 30px;
+            }
+
+            /* Main container */
+            .container {
+                max-width: 100%; /* Full width for letter paper */
+                margin: 20px auto;
+                padding: 20px;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            /* Section styling */
+            .section {
+                display: flex;
+                justify-content: space-between;
+                border: 1px solid #ddd;
+                padding: 15px;
+                margin-bottom: 20px;
+                background-color: #f9f9f9;
+                border-radius: 8px;
+            }
+
+            .section h3 {
+                font-size: 0.8em;
+                color: #004085;
+                margin-bottom: 10px;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            .section p {
+                font-size: 0.7em;
+                line-height: 1.4;
+                margin: 5px 0;
+                color: #333;
+            }
+
+            /* Table design */
+            table {
+                width: 100%; /* Consistent width for tables */
+                border-collapse: collapse;
+                margin-bottom: 20px;
+                font-size: 0.9em;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+
+            table th,
+            table td {
+                padding: 12px 15px;
+                text-align: center;
+                border: 1px solid #ddd;
+                vertical-align: middle;
+            }
+
+            table th {
+                background-color: #004085;
+                color: white;
+                font-size: 1em;
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+
+            table td {
+                background-color: #f9f9f9;
+                color: #333;
+            }
+
+            /* Alternating row colors for readability */
+            table tbody tr:nth-child(even) {
+                background-color: #f1f5fb;
+            }
+
+            table tbody tr:nth-child(odd) {
+                background-color: #ffffff;
+            }
+            @media screen and (max-width: 768px) {
+                table {
+                    display: block; /* Make table scrollable horizontally */
+                    overflow-x: auto;
+                    white-space: nowrap; /* Prevent table contents from wrapping */
+                    -webkit-overflow-scrolling: touch; /* Enable smooth scrolling for iOS */
+                }
+
+                table th,
+                table td {
+                    font-size: 0.8em; /* Slightly reduce font size */
+                    padding: 8px 10px; /* Adjust padding for smaller screens */
+                }
+
+                table th {
+                    text-align: left; /* Align headers left for better readability */
+                }
+
+                table td {
+                    text-align: left; /* Align content left for better readability */
+                }
+            }
+
+            /* Further Adjustments for Very Small Screens (Phones <480px) */
+            @media screen and (max-width: 480px) {
+                .header img {
+                    height: 25px;
+                    margin-left: 10px;
+                }
+                .header {
+                    /*background-color: #f8f9fa; /* Bootstrap light background */
+                    /*color: #343a40; /* Dark text */
+                    /*border-bottom: 2px solid #dee2e6; /* Subtle border */
+                    /*padding: 15px;*/
+                    font-size: 0.5em;
+                    padding: 6px 8px; /* Compact padding */
+                }
+                table th,
+                table td {
+                    font-size: 0.7em; /* Reduce font size further */
+                    padding: 6px 8px; /* Compact padding */
+                }
+            }
+
+            /* Project cost styling */
+            .project-cost {
+                font-size: 1.1em;
+                text-align: right;
+                font-weight: bold;
+                color: #004085;
+                margin-top: 20px;
+                padding: 10px;
+                border-top: 1px solid #004085;
+            }
+
+            /* Terms and conditions styling */
+            .terms {
+                font-size: 0.9em;
+                color: #333;
+                line-height: 1.6;
+                margin-top: 20px;
+                padding: 15px;
+                background-color: #f9f9f9;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+            .terms strong {
+                color: #004085;
+            }
+
+            /* Print button */
+            .print-button {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 10px 15px;
+                background-color: #004085;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 0.9em;
+                z-index: 1001;
+            }
+
+            .print-button:hover {
+                background-color: #002654;
+            }
+
+            /* Print-specific styles */
+            /* Print-specific styles */
+            @media print {
+    /* General print styles */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #fff; /* Ensure consistent white background for the page */
+    }
+
+    .container {
+        max-width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+
+    /* Hide unnecessary elements */
+    .print-button {
+        display: none;
+    }
+
+    /* Updated Header adjustments */
+    .header {
+        background-color: transparent; /* Set background to fully transparent */
+        color: black; /* Standard black text for better contrast */
+        border-bottom: none; /* Remove border for a seamless look */
+        padding: 15px;
+    }
+
+    .header img {
+        content: url("{% static 'cotizaciones/logo.png' %}"); /* Print-specific logo */
+        height: 50px;
+    }
+
+    .header .title {
+        font-size: 1.5em;
+        color: black; /* Ensure dark text for readability */
+        font-weight: bold;
+    }
+
+    .header .folio {
+        color: red; /* Retain red text for visibility */
+        font-weight: bold;
+    }
+
+    /* Table styles */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        font-size: 0.9em;
+        border: 1px solid #dee2e6;
+    }
+
+    table th,
+    table td {
+        padding: 12px;
+        text-align: center;
+        vertical-align: middle;
+        border: 1px solid #dee2e6; /* Subtle border */
+    }
+
+    table th {
+        background-color: #f8f9fa; /* Light header background */
+        color: #343a40; /* Bootstrap dark text */
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: 0.85em;
+    }
+
+    table tbody tr {
+        transition: all 0.3s ease-in-out;
+    }
+
+    table tbody tr:nth-child(even) {
+        background-color: #f8f9fa; /* Alternating light background */
+    }
+
+    table tbody tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+
+    /* Enhanced table look */
+    table {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Page formatting for print */
+    .terms {
+        background-color: white;
+        border: 1px solid #dee2e6;
+        padding: 15px;
+        font-size: 0.9em;
+        line-height: 1.6;
+    }
+
+    .terms strong {
+        color: #212529; /* Bootstrap dark text */
+    }
+
+    /* Footer adjustments */
+    .container > *:not(:first-child) {
+        margin-top: 10px;
+    }
+
+    /* Letter paper size for print */
+    html, body {
+        width: 8.5in;
+        height: 11in;
+    }
+
+    /* Responsive scaling for print */
+    html {
+        -webkit-print-color-adjust: exact; /* Ensure print colors appear as defined */
+    }
+}
+
+
+
+
+
+        </style>
+        
+</head>
+
+
+<body>
+    <div class="header">
+        <img src="{% static 'cotizaciones/logo_white.png' %}" alt="Company Logo">
+        <div class="title">Quotation Sheet</div>
+        <div class="folio">Folio: {{ folio }}</div>
+    </div>
+
+    <button class="print-button" onclick="window.print()">Print Quotation</button>
+
+    <div class="container">
+        <div class="section">
+            <div>
+                <h3>Customer Information</h3>
+                <p><strong>Name:</strong> {{ customer_information.name }}</p>
+                <p><strong>Address:</strong> {{ customer_information.address }}</p>
+                <p><strong>Manager:</strong> {{ customer_information.manager }}</p>
+                <p><strong>Contact:</strong> <a href="mailto:{{ customer_information.contact }}">{{ customer_information.contact }}</a></p>
+            </div>
+            <div>
+                <h3>Quotation Details</h3>
+                <p><strong>Quotation Date:</strong> {{ quotation_details.quotation_date }}</p>
+                <p><strong>Project Name:</strong> {{ quotation_details.project_name }}</p>
+                <p><strong>Start Date:</strong> {{ quotation_details.start_date }}</p>
+                <p><strong>End Date:</strong> {{ quotation_details.end_date }}</p>
+            </div>
+            <div>
+                <h3>Financial Information</h3>
+                <p><strong>Currency:</strong> {{ financial_information.currency }}</p>
+                <p><strong>Exchange Rate:</strong> {{ financial_information.exchange_rate }}</p>
+                <p><strong>Payment Terms:</strong> {{ financial_information.payment_terms }}</p>
+                <p><strong>Validity:</strong> {{ financial_information.validity_date }}</p>
+            </div>
+        </div>
+
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Unit</th>
+                    <th>Materials</th>
+                    <th>Labor</th>
+                    <th>Equipment</th>
+                    <th>Extras</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in summary %}
+                <tr>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.unit }}</td>
+                    <td>{{ item.materials }}</td>
+                    <td>{{ item.labor }}</td>
+                    <td>{{ item.equipment }}</td>
+                    <td>{{ item.extras }}</td>
+                    <td>{{ item.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p class="project-cost">PROJECT COST: {{ project_cost }} {{ financial_information.currency }}</p>
+        <p class="terms">
+            By accepting this quotation, the Client agrees to the following Terms & Conditions.
+            <br><br>
+            <img src="{% static 'cotizaciones/qr_code.png' %}" alt="QR Code" style="display: block; margin: 20px auto; width: 100px; height: 100px;">
+            <br>Scan this QR code for more information.
+        </p>
+    </div>
+
+    <div style="page-break-after: always;"></div>
+
+    <div class="container details">
+        <h2>Quotation Details</h2>
+
+        <h3>1. Labor</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Worker Qty</th>
+                    <th>Work Days</th>
+                    <th>Unit Price</th>
+                    <th>Total Price</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for labor in labor %}
+                <tr>
+                    <td>{{ labor.item }}</td>
+                    <td>{{ labor.worker_qty }}</td>
+                    <td>{{ labor.work_days }}</td>
+                    <td>{{ labor.unit_price }}</td>
+                    <td>{{ labor.total_price }}</td>
+                    <td>
+                        {% if labor.remarks %}
+                            {{ labor.remarks }}
+                        {% else %}
+                            {{ labor.worker_qty }} * {{ labor.item }} * {{ labor.work_days }} days
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="4" style="text-align: left;"><b>Sum</b></td>
+                    <td><b>{{ labor_sum }}</b></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>2. Materials</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Material</th>
+                    <th>Spec</th>
+                    <th>Unit</th>
+                    <th>Q'ty</th>
+                    <th>Unit Cost</th>
+                    <th>Total</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for material in materials %}
+                <tr>
+                    <td>{{ material.material }}</td>
+                    <td>{{ material.spec }}</td>
+                    <td>{{ material.unit }}</td>
+                    <td>{{ material.qty }}</td>
+                    <td>{{ material.unit_cost }}</td>
+                    <td>{{ material.total }}</td>
+                    <td>{{ material.remarks }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="5" style="text-align: left;"><b>Sum</b></td>
+                    <td><b>{{ material_sum }}</b></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>3. Equipment</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Days</th>
+                    <th>Unit Price</th>
+                    <th>Total Price</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for equip in equipment %}
+                <tr>
+                    <td>{{ equip.description }}</td>
+                    <td>{{ equip.qty }}</td>
+                    <td>{{ equip.days }}</td>
+                    <td>{{ equip.unit_price }}</td>
+                    <td>{{ equip.total_price }}</td>
+                    <td>{{ equip.remarks }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="4" style="text-align: left;"><b>Sum</b></td>
+                    <td><b>{{ equipment_sum }}</b></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>4. Indirect Costs</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cost in indirect_costs %}
+                <tr>
+                    <td>{{ cost.description }}</td>
+                    <td>{{ cost.amount }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td style="text-align: left;"><b>Sum</b></td>
+                    <td><b>{{ indirect_sum }}</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+
+</html>

@@ -1,0 +1,426 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    {% if title %}
+        <title>Borbolla Group - {{ title }}</title>
+    {% else %}
+        <title>Borbolla Group</title>
+    {% endif %}
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'landing/img/favicon.png' %}">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- All css here -->
+    <link rel="stylesheet" href="{% static 'landing/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/meanmenu.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/default.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/responsive.css' %}">
+</head>
+<body>
+    <!--[if lte IE 9]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+
+   <!-- header start -->
+   <header class="transparent-header">
+       <div class="header-top-area header-white">
+           <div class="container">
+               <div class="row">
+                   <div class="col-xl-6 col-lg-6 col-md-6 col-6 d-flex align-items-center">
+                       <div class="language f-left">
+                           <ul>
+                               <li><a href="#">English <i class="fas fa-angle-down"></i></a>
+                                <ul>
+                                    <li><a href="#">English </a></li>
+                                    <li><a href="#">Español </a></li>
+                                    <li><a href="#">Korean </a></li>
+                                </ul>
+                            </li>
+                           </ul>
+                       </div>
+                       <div class="social-icon f-left d-none d-md-block">
+                           <a href="#"><i class="fab fa-facebook-f"></i></a>
+                           <a href="#"><i class="fab fa-twitter"></i></a>
+                            {% if user.is_authenticated %}
+                                <a href="/profile">Welcome ! {{ user.username }}</a>
+                            {% endif %}
+                       </div>
+                   </div>
+                   <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                       <div class="header-right f-right">
+                           <ul>
+                               <li><a href="#"><i class="fas fa-search"></i></a>
+                                    <div class="search-form">
+                                        <form action="#">
+                                            <input type="text" placeholder="Search">
+                                            <button><i class="fas fa-search"></i></button>
+                                        </form>
+                                    </div>
+                                </li>
+                                <li>
+                                    <!-- User Login -->
+                                    {% if not user.is_authenticated %}
+                                    <a href="{% url 'login' %}">
+                                        <i class="fas fa-user"></i>
+                                    </a>
+                                    {% endif %}
+                                </li>
+                                
+                                <li>
+                                    <!-- Blog Access -->
+                                    {% if user.is_authenticated %}
+                                    <a href="{% url 'blog' %}">
+                                        <i class="fas fa-blog"></i>
+                                    </a>
+                                    {% endif %}
+                                </li>
+                                
+                                <li>
+                                    <!-- Greeting the Logged-In User -->
+                                    {% if user.is_authenticated %}
+                                    <a href="{% url 'profile' %}">
+                                        <i class="fas fa-smile"></i> Hello, {{ user.username }}
+                                    </a>
+                                    {% endif %}
+                                </li>
+                               <li class="info-bar"><a href="#"><i class="fas fa-bars"></i></a></li>
+                           </ul>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+       <div class="extra-info">
+            <div class="close-icon">
+                <button><i class="far fa-window-close"></i></button>
+            </div>
+            <p>At our company, we are dedicated to providing cutting-edge solutions that streamline industrial processes and drive innovation. 
+                Our expertise spans across various sectors, ensuring that our clients receive tailored services that meet their unique needs. 
+                We believe in fostering long-term partnerships by delivering reliable and efficient solutions that propel businesses forward.</p>
+
+           <div class="instagram">
+               <a href="#"><img src="{% static 'landing/img/instagram/insta1.png' %}" alt=""></a>
+               <a href="#"><img src="{% static 'landing/img/instagram/insta2.png' %}" alt=""></a>
+               <a href="#"><img src="{% static 'landing/img/instagram/insta3.png' %}" alt=""></a>
+               <a href="#"><img src="{% static 'landing/img/instagram/insta4.png' %}" alt=""></a>
+               <a href="#"><img src="{% static 'landing/img/instagram/insta5.png' %}" alt=""></a>
+               <a href="#"><img src="{% static 'landing/img/instagram/insta6.png' %}" alt=""></a>
+           </div>
+            <div class="social-icon-right mt-30">
+                <a href="#">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#">
+                    <i class="fab fa-google-plus-g"></i>
+                </a>
+                <a href="#">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+       </div>
+       <div class="header-bottom-area">
+           <div class="container width-100-xs">
+               <div class="white-menu white-bg">
+                    <div class="row align-items-center">
+                        <div class="col-xl-3 col-lg-3">
+                            <div class="logo">
+                                <a href="index.html">
+                                    <img src="{% static 'landing/img/logo/logo.png' %}" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-xl-9 col-lg-9">
+                            <div class="header-button f-right d-none d-xl-block">
+                                
+                                
+                                {% if user.is_authenticated %}
+                                    <a href="{% url 'reportes:project_list' %}">System</a>
+                                    <a>
+                                        <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" style="border: none; background: none; color: inherit; padding: 0; font: inherit; cursor: pointer;">Logout</button>
+                                        </form>
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'login' %}">Login</a>
+                                {% endif %}
+                            </div>
+                            <div class="main-menu f-right">
+                                <nav id="mobile-menu">
+                                    <ul>
+                                        <li>
+                                            <a href="/">Home</a>
+                                        </li>
+                                        <li>
+                                            <a href="/portfolio/">Portfolio</a>
+                                        </li>
+                                        <li>
+                                            <a href="/about">About</a>
+                                            <ul class="submenu">
+                                                <li>
+                                                    <a href="/privacy-policy">Privacy Policy</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Construction PPT</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Rigging PPT</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Utilities PPT</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#">Automation PPT</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        
+                                        {% if user.is_authenticated %}
+                                            
+                                            {% if user.is_superuser %}
+                                                <li>
+                                                    <a href="/admin">Admin Panel</a>
+                                                </li>
+                                            {% endif %}
+                                            {% if user.is_staff %}
+                                                <li>
+                                                    <a href="/">Apps</a>
+                                                    <ul class="submenu">
+                                                        <li>
+                                                            <a href="facturador/organizaciones">Facturador (pending)</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Asistencia (pending)</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Banco STP(pending)</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Pre-Cierre (pending)</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Proyectos (pending)</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'profile' %}">Profile</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'blog' %}">Intern Blog</a>
+                                                    <ul class="submenu">
+                                                        <li>
+                                                            <a href="{% url 'post-create' %}">Create Post</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            {% endif %}
+                                        {% else %}
+                                                <li>
+                                                    <a href="/register">Register</a>
+                                                </li>
+                                            
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
+                            <div class="mobile-menu"></div>
+                        </div>
+                    </div>
+               </div>
+           </div>
+       </div>
+   </header>
+
+
+    {% if not banner %}
+        <!-- slider start -->
+        <div class="slider-area">
+            <div class="slider-active dot-style">
+                <div class="single-slider height-100 d-flex align-items-center" style="background-image:url({% static 'landing/img/slider/slide-bg.jpg' %})">
+                    <div class="container">
+                        <div class="row ">
+                            <div class="col-xl-6 col-lg-7 d-flex align-items-center">
+                                <div class="slider-content slide-white pt-110">
+                                    <span data-animation="fadeInLeft" data-delay=".5s">Industrial Solutions</span>
+                                    <h1 data-animation="fadeInLeft" data-delay="1s">BUILDING INDUSTRY TOGETHER</h1>
+                                    <p data-animation="fadeInLeft" data-delay="1.5s">Suited solutions for your day-to-day industry requirements</p>
+                                    <a data-animation="fadeInLeft" data-delay="2s" href="#" class="btn brand-btn" style="color: white;">Ask for a Quote</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-slider height-100 d-flex align-items-center" style="background-image:url({% static 'landing/img/slider/slide-bg.jpg' %})">
+                    <div class="container">
+                        <div class="row ">
+                            <div class="col-xl-6 col-lg-7 d-flex align-items-center">
+                                <div class="slider-content slide-white pt-110">
+                                    <span data-animation="fadeInLeft" data-delay=".5s">Innovative Industrial Solutions</span>
+                                    <h1 data-animation="fadeInLeft" data-delay="1s">POWERING YOUR SUCCESS</h1>
+                                    <p data-animation="fadeInLeft" data-delay="1.5s">Customized industrial solutions designed to enhance your operational efficiency.</p>
+                                    <a data-animation="fadeInLeft" data-delay="2s" href="#" class="btn brand-btn" style="color: white;">Discover More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-slider height-100 d-flex align-items-center" style="background-image:url({% static 'landing/img/slider/slide-bg.jpg' %})">
+                    <div class="container">
+                        <div class="row ">
+                            <div class="col-xl-6 col-lg-7 d-flex align-items-center">
+                                <div class="slider-content slide-white pt-110">
+                                    <span data-animation="fadeInLeft" data-delay=".5s">Empowering Startups</span>
+                                    <h1 data-animation="fadeInLeft" data-delay="1s">TRANSFORMING IDEAS INTO REALITY</h1>
+                                    <p data-animation="fadeInLeft" data-delay="1.5s">We provide the tools and support to help startups build a strong foundation for growth.</p>
+                                    <a data-animation="fadeInLeft" data-delay="2s" href="#" class="btn brand-btn" style="color: white;">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-slider height-100 d-flex align-items-center" style="background-image:url({% static 'landing/img/slider/slide-bg.jpg' %})">
+                    <div class="container">
+                        <div class="row ">
+                            <div class="col-xl-6 col-lg-7 d-flex align-items-center">
+                                <div class="slider-content slide-white pt-110">
+                                    <span data-animation="fadeInLeft" data-delay=".5s">Building a Sustainable Future</span>
+                                    <h1 data-animation="fadeInLeft" data-delay="1s">CREATING VALUE THROUGH INNOVATION</h1>
+                                    <p data-animation="fadeInLeft" data-delay="1.5s">Join us in our mission to innovate and create solutions that benefit both business and environment.</p>
+                                    <a data-animation="fadeInLeft" data-delay="2s" href="#" class="btn brand-btn" style="color: white;">Get Started</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <!-- slider end -->
+    {% endif %}
+    
+    {% block content %}
+    {% endblock content %}
+    
+    <!-- footer start -->
+    <footer>
+        <div class="widget-area black-bg black-footer pt-90 pb-60">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-3 col-md-4 mb-30">
+                        <div class="footer-widget">
+                            <h3>Contact Us</h3>
+                            <ul class="footer-info">
+                                <li>+1 (956) 261-5885</li>
+                                <li>customer-support@borbollagroup.com</li>
+                                <li>319 E Comma Ave. suite 274, Hidalgo, TX</li>
+                                <li>Zip 78557, US</li>
+                                <li>Open hours: 8.00-18.00 Mon-Fri</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-5 col-md-3 mb-30">
+                        <div class="footer-widget">
+                            <h3>Useful Links</h3>
+                            <ul class="footer-link">
+                                <li><a href="/">Home</a></li>
+                                <li><a href="/about">About Us</a></li>
+                                <li><a href="#">Services</a></li>
+                                <li><a href="#">Single Service</a></li>
+                                <li><a href="#">Work</a></li>
+                                <li><a href="#">Blogs</a></li>
+                                <li><a href="#">Contact</a></li>
+                                <li><a href="#">Support Career</a></li>
+                                <li><a href="/privacy-policy">Privacy Policy</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-5 mb-30">
+                        <div class="footer-widget">
+                            <h3>Our Newsletter</h3>
+                            <p>Subscribe to our mailing list to get updates to your email inbox.</p>
+                            <form action="#">
+                                <input type="email" placeholder="E-mail">
+                                <button style="color: white;">Subscribe</button>
+                            </form>
+                            <div class="footer-icon mt-30">
+                                <a href="#">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#">
+                                    <i class="fab fa-google-plus-g"></i>
+                                </a>
+                                <a href="#">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright-area black-copyright pt-25 pb-25">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-4">
+                        <div class="copyright-text text-left ">
+                            <p>Copyright ©2018 Borbolla Automation Incorporated</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-8">
+                        <div class="footer-menu text-left text-md-right">
+                            <nav>
+                                <ul>
+                                    <li><a href="/about">About</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                    <li><a href="#">Term & Conditions</a></li>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                    <li><a href="#">Site Map</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- footer end -->
+
+    <!-- All js here -->
+    <script src="{% static 'landing/js/vendor/modernizr-3.5.0.min.js' %}"></script>
+    <script src="{% static 'landing/js/vendor/jquery-1.12.4.min.js' %}"></script>
+    <script src="{% static 'landing/js/popper.min.js' %}"></script>
+    <script src="{% static 'landing/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'landing/js/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'landing/js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'landing/js/jquery.meanmenu.min.js' %}"></script>
+    <script src="{% static 'landing/js/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'landing/js/jquery.counterup.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+    <script src="{% static 'landing/js/slick.min.js' %}"></script>
+    <script src="{% static 'landing/js/plugins.js' %}"></script>
+    <script src="{% static 'landing/js/main.js' %}"></script>
+</body>
+</html>

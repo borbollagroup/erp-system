@@ -1,0 +1,317 @@
+{
+    "client_info": {
+        "client_name": "",
+        "address": "Carretera Pesqueria los Ramones km 13 al 15, int A, 66679 N.L.",
+        "country_name": "Mexico",
+        "manager": "",
+        "contact": "",
+        "distance_km": "0"
+    },
+    "project_info": {
+        "quotation_number": "Q-98789",
+        "quotation_date": "2024-11-11",
+        "project_name": "",
+        "project_start": "2024-11-11",
+        "project_end": "2024-11-11",
+        "description": ""
+    },
+    "financial_info": {
+        "currency": "USD",
+        "exchange_rate": "0",
+        "tax_rate": "16%"
+    },
+    "header": {
+        "logo_path": "logo_group.jpeg",
+        "title": "Quotation Sheet",
+        "folio": "568027"
+    },
+    "personnel": [
+        {
+            "role": "Worker",
+            "quantity": 1,
+            "unit_price": 70
+        },
+        {
+            "role": "Supervisor",
+            "quantity": 0,
+            "unit_price": 100
+        }
+    ],
+    "material": [
+        {
+            "category": "Pipe",
+            "specification": "15A (1/2 inch)",
+            "quantity": 0,
+            "unit_price": 3.49,
+            "remarks": ""
+        },
+        {
+            "category": "Pipe",
+            "specification": "20A (3/4 inch)",
+            "quantity": 0,
+            "unit_price": 6.45,
+            "remarks": ""
+        },
+        {
+            "category": "Pipe",
+            "specification": "25A (1 inch)",
+            "quantity": 0,
+            "unit_price": 8.6,
+            "remarks": ""
+        },
+        {
+            "category": "Pipe",
+            "specification": "32A (1 1/4 inch)",
+            "quantity": 0,
+            "unit_price": 11.6,
+            "remarks": ""
+        },
+        {
+            "category": "Pipe",
+            "specification": "50A (2 inch)",
+            "quantity": 60,
+            "unit_price": 21,
+            "remarks": ""
+        },
+        {
+            "category": "Elbow",
+            "specification": "15A (1/2 inch)",
+            "quantity": 0,
+            "unit_price": 10,
+            "remarks": ""
+        },
+        {
+            "category": "Elbow",
+            "specification": "20A (3/4 inch)",
+            "quantity": 0,
+            "unit_price": 2,
+            "remarks": ""
+        },
+        {
+            "category": "Elbow",
+            "specification": "25A (1 inch)",
+            "quantity": 0,
+            "unit_price": 24,
+            "remarks": ""
+        },
+        {
+            "category": "Elbow",
+            "specification": "32A (1 1/4 inch)",
+            "quantity": 0,
+            "unit_price": 48,
+            "remarks": ""
+        },
+        {
+            "category": "Elbow",
+            "specification": "50A (2 inch)",
+            "quantity": 20,
+            "unit_price": 6,
+            "remarks": ""
+        },
+        {
+            "category": "Union",
+            "specification": "15A (1/2 inch)",
+            "quantity": 0,
+            "unit_price": 23,
+            "remarks": ""
+        },
+        {
+            "category": "Union",
+            "specification": "20A (3/4 inch)",
+            "quantity": 0,
+            "unit_price": 1.5,
+            "remarks": ""
+        },
+        {
+            "category": "Union",
+            "specification": "25A (1 inch)",
+            "quantity": 0,
+            "unit_price": 35,
+            "remarks": ""
+        },
+        {
+            "category": "Union",
+            "specification": "32A (1 1/4 inch)",
+            "quantity": 0,
+            "unit_price": 24,
+            "remarks": ""
+        },
+        {
+            "category": "Union",
+            "specification": "50A (2 inch)",
+            "quantity": 6,
+            "unit_price": 5,
+            "remarks": ""
+        },
+        {
+            "category": "Valve",
+            "specification": "15A (1/2 inch)",
+            "quantity": 0,
+            "unit_price": 85,
+            "remarks": ""
+        },
+        {
+            "category": "Valve",
+            "specification": "20A (3/4 inch)",
+            "quantity": 0,
+            "unit_price": 8,
+            "remarks": ""
+        },
+        {
+            "category": "Valve",
+            "specification": "25A (1 inch)",
+            "quantity": 0,
+            "unit_price": 234,
+            "remarks": ""
+        },
+        {
+            "category": "Valve",
+            "specification": "32A (1 1/4 inch)",
+            "quantity": 0,
+            "unit_price": 312,
+            "remarks": ""
+        },
+        {
+            "category": "Valve",
+            "specification": "50A (2 inch)",
+            "quantity": 10,
+            "unit_price": 42,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "250 SQ (500 MCM)",
+            "quantity": 0,
+            "unit_price": 56,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "150 SQ (300 MCM)",
+            "quantity": 0,
+            "unit_price": 34,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "50 SQ (1/0 AWG)",
+            "quantity": 0,
+            "unit_price": 12,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "35 SQ (2 AWG)",
+            "quantity": 0,
+            "unit_price": 7,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "32 SQ (4 AWG)",
+            "quantity": 0,
+            "unit_price": 6,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "16 SQ (6 AWG)",
+            "quantity": 0,
+            "unit_price": 16,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "10 SQ (8 AWG)",
+            "quantity": 0,
+            "unit_price": 12,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "6 SQ (10 AWG)",
+            "quantity": 0,
+            "unit_price": 7,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "4 SQ (12 AWG)",
+            "quantity": 0,
+            "unit_price": 3,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "16 SQ + 4G (4/6 AWG)",
+            "quantity": 0,
+            "unit_price": 16,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "10 SQ + 4G (4/8 AWG)",
+            "quantity": 0,
+            "unit_price": 12,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "6 SQ + 4G (4/10 AWG)",
+            "quantity": 0,
+            "unit_price": 7,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "4 SQ + 3G (3/12 AWG)",
+            "quantity": 0,
+            "unit_price": 3,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "4 SQ + 4G (4/12 AWG)",
+            "quantity": 0,
+            "unit_price": 5,
+            "remarks": ""
+        },
+        {
+            "category": "Breaker & etc",
+            "specification": "",
+            "quantity": 0,
+            "unit_price": 13500,
+            "remarks": ""
+        }
+    ],
+    "overhead": [
+        {
+            "category": "Equipment",
+            "description": "LIFT EQUIPMENT",
+            "quantity": 2,
+            "unit_price": 95,
+            "days_used": 16
+        },
+        {
+            "category": "Equipment",
+            "description": "FORKLIFT 7.5T",
+            "quantity": 1,
+            "unit_price": 330,
+            "days_used": 2
+        },
+        {
+            "category": "Equipment",
+            "description": "FORKLIFT 15T",
+            "quantity": 0,
+            "unit_price": 650,
+            "days_used": 0
+        },
+        {
+            "category": "Equipment",
+            "description": "CRANE 30T",
+            "quantity": 0,
+            "unit_price": 700,
+            "days_used": 1
+        }
+    ]
+}

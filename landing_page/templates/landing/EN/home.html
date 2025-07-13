@@ -1,0 +1,344 @@
+{% extends "landing/EN/base.html" %}
+{% load static %}
+{% block content %}
+<!-- features-area start -->
+<div class="features-area gray-bg pt-90 pb-70">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="features-title text-center mb-80">
+                    <h2>Stay motivated <br>  <span>to lead your business.</span></h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-4 col-lg-4 col-md-4">
+                <div class="single-features feature-white text-center mb-30">
+                    <img src="{% static 'landing/img/bg/feature-1.jpg' %}" alt="">
+                    <h2>Industrial Construction</h2>
+                    <p>Expertise in constructing robust industrial facilities to meet your operational needs.</p>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-4">
+                <div class="single-features feature-white text-center mb-30">
+                    <img src="{% static 'landing/img/bg/feature-2.jpg' %}" alt="">
+                    <h2>Industrial Engineering & Execution of Projects</h2>
+                    <p>Delivering comprehensive engineering solutions for seamless project execution.</p>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-4">
+                <div class="single-features feature-white text-center mb-30">
+                    <img src="{% static 'landing/img/bg/feature-3.jpg' %}" alt="">
+                    <h2>Machinery Utilities Install</h2>
+                    <p>Ensuring efficient installation of utilities for your machinery for optimal performance.</p>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-4">
+                <div class="single-features feature-white text-center mb-30">
+                    <img src="{% static 'landing/img/bg/feature-4.jpg' %}" alt="">
+                    <h2>Machinery Download</h2>
+                    <p>Expert machinery download services to ensure safe and precise handling.</p>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-4">
+                <div class="single-features feature-white text-center mb-30">
+                    <img src="{% static 'landing/img/bg/feature-5.jpg' %}" alt="">
+                    <h2>Utilities Construction</h2>
+                    <p>Building reliable utility systems to support your industrial operations.</p>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-4">
+                <div class="single-features feature-white text-center mb-30">
+                    <img src="{% static 'landing/img/bg/feature-6.jpg' %}" alt="">
+                    <h2>Machinery Rigging</h2>
+                    <p>Specialized rigging services to move and position heavy machinery with precision.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- features-area end -->
+<!-- portfolio-area start -->
+<div class="portfolio-area pt-100 pb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="section-title text-center mb-50">
+                    <h2>Recent Projects</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="portfolio-menu mb-40 text-center">
+                    <button class="active" data-filter="*">ALL</button>
+                    <button data-filter=".cat1">INDUSTRIAL AUTOMATION</button>
+                    <button data-filter=".cat2">INDUSTRIAL CONSTRUCTION</button>
+                    <button data-filter=".cat3">RIGGING</button>
+                    <button data-filter=".cat4">ELECTRICAL</button>
+                    <button data-filter=".cat5">UTILITIES</button>
+                    <button data-filter=".cat6">OFFICE</button>
+                </div>
+            </div>
+        </div>
+        <div class="row grid">
+            <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat3 cat5">
+                <div class="portfolio-wrapper mb-30">
+                    <div class="portfolio-thumb">
+                        <img src="{% static 'landing/img/portfolio/port1.png' %}" alt="">
+                    </div>
+                    <div class="portfolio-content" style="color: white;">
+                        <div class="icon">
+                            <a class="popup-img" href="{% static 'landing/img/portfolio/port1.jpg' %}">
+                                <span></span>
+                            </a>
+                        </div>
+                        <h3>
+                            <a href="#" style="color: white;">Converter Housing | Hyundai Transys</a>
+                        </h3>
+                        <span>Production line installation turnkey project, total of 48 CNC Machines Downloaded, unboxed, Rigged, Utility connection.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat2 cat4 cat5 cat6">
+                <div class="portfolio-wrapper mb-30">
+                    <div class="portfolio-thumb">
+                        <img src="{% static 'landing/img/portfolio/r_port2.png' %}" alt="">
+                    </div>
+                    <div class="portfolio-content" style="color: white;">
+                        <div class="icon">
+                            <a class="popup-img" href="{% static 'landing/img/portfolio/port2.png' %}">
+                                <span></span>
+                            </a>
+                        </div>
+                        <h3>
+                            <a href="#" style="color: white;">Compressor Room Construction | Hyundai Transys</a>
+                        </h3>
+                        <span>Compressor Room Design + Installation total of 8 Compressors Alongside Air Reservoir Tanks, AfterCooler, Filters, Bypasses, Air Dryer and connection to main plant Utilities.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat2 cat3 cat4 cat5">
+                <div class="portfolio-wrapper mb-30">
+                    <div class="portfolio-thumb">
+                        <img src="{% static 'landing/img/portfolio/port3.png' %}" alt="">
+                    </div>
+                    <div class="portfolio-content" style="color: white;">
+                        <div class="icon">
+                            <a class="popup-img" href="{% static 'landing/img/portfolio/port3.jpg' %}">
+                                <span></span>
+                            </a>
+                        </div>
+                        <h3>
+                            <a href="#" style="color: white;">Anodizing Machine | VolksWagen Valve Body</a>
+                        </h3>
+                        <span>Foundation Design + Construction, Machine Mounting, Electric Utilities, HVAC Utilities, And Machine Setup.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat2 cat4 cat5 cat6 ">
+                <div class="portfolio-wrapper mb-30">
+                    <div class="portfolio-thumb">
+                        <img src="{% static 'landing/img/portfolio/port4.jpg' %}" alt="">
+                    </div>
+                    <div class="portfolio-content" style="color: white;">
+                        <div class="icon">
+                            <a class="popup-img" href="{% static 'landing/img/portfolio/port4.png' %}">
+                                <span></span>
+                            </a>
+                        </div>
+                        <h3>
+                            <a href="#" style="color: white;">Utility Room | Hyundai Transys</a>
+                        </h3>
+                        <span>Utility Room Inner Construction + Office Construction + Substation HVAC.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat2 cat3 cat4 cat5">
+                <div class="portfolio-wrapper mb-30">
+                    <div class="portfolio-thumb">
+                        <img src="{% static 'landing/img/portfolio/r_port6.jpg' %}" alt="">
+                    </div>
+                    <div class="portfolio-content" style="color: white;">
+                        <div class="icon">
+                            <a class="popup-img" href="{% static 'landing/img/portfolio/port6.jpg' %}">
+                                <span></span>
+                            </a>
+                        </div>
+                        <h3>
+                            <a href="#"style="color: white;">Gantry Crane | HPM</a>
+                        </h3>
+                        <span>3 Ton Gantry crane Turn-key project Construction Design + Construction + Financing Available.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat2 cat3 cat4 cat5 cat6">
+                <div class="portfolio-wrapper mb-30">
+                    <div class="portfolio-thumb">
+                        <img src="{% static 'landing/img/portfolio/port5.png' %}" alt="">
+                    </div>
+                    <div class="portfolio-content" style="color: white;">
+                        <div class="icon">
+                            <a class="popup-img" href="{% static 'landing/img/portfolio/port5.jpg' %}">
+                                <span></span>
+                            </a>
+                        </div>
+                        <h3>
+                            <a href="#" style="color: white;">Warehouse Full Construction | APR</a>
+                        </h3>
+                        <span>Warehouse Turn-key project Construction Design + Construction + Financing Available.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="videw-project text-center mt-50">
+                    <a href="#" class="btn brand-btn" style="color: white;">ALL PROJECTS</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- portfolio-area end -->
+<!-- counter-area start -->
+<div class="counter-area pt-75 pb-45" style="background-image:url({% static 'landing/img/bg/bg-counter.png' %})">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-3 col-lg-3 col-md-3">
+                <div class="single-couter counter-2  d-xl-flex mb-30" style="color: white;">
+                    <span>25</span>
+                    <p>YEARS OF
+                        <br> EXPERIENCE</p>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3">
+                <div class="single-couter counter-2  d-xl-flex mb-30">
+                    <span>999+</span>
+                    <p>Projects
+                        <br> well done!</p>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3">
+                <div class="single-couter counter-2 d-xl-flex mb-30">
+                    <span>9</span>
+                    <p>Companies
+                        <br> Inside Borbolla Group</p>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3">
+                <div class="single-couter counter-2 d-xl-flex  mb-30">
+                    <span>24</span>
+                    <p>happy
+                        <br>customers</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- counter-area end -->
+<!-- team-area strat -->
+<div class="team-area pt-90 pb-70">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="section-title section-title-2 text-center mb-70">
+                    <h2>Multidisciplinary Projects , from start to end</h2>
+                    <p>Our dedicated team ensures that each project is completed with the highest standards of quality and efficiency.</p>
+                    <a href="careers.html">Apply for a job ></a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-3 col-lg-3 col-md-6">
+                <div class="text-center mb-30">
+                    <div class="team-img">
+                        <img src="{% static 'landing/img/team/team1.png' %}" alt="">
+                        
+                    </div>
+                    <div class="team-info">
+                        <h3>Foundation Steel Design</h3>
+                        <span>Design + Construction</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-6">
+                <div class="text-center mb-30">
+                    <div class="team-img">
+                        <img src="{% static 'landing/img/team/team2.png' %}" alt="">
+                        <div class="team-icon">
+                            <a href="#">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fab fa-google-plus-g"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3>Foundation Concrete Pouring</h3>
+                        <span>According to pre-defined levels</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-6">
+                <div class="text-center mb-30">
+                    <div class="team-img">
+                        <img src="{% static 'landing/img/team/team3.png' %}" alt="">
+                        <div class="team-icon">
+                            <a href="#">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fab fa-google-plus-g"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3>Machine Mounting</h3>
+                        <span>Machine Mounting + Utilities Connection</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-6">
+                <div class="text-center mb-30">
+                    <div class="team-img">
+                        <img src="{% static 'landing/img/team/team4.png' %}" alt="">
+                        <div class="team-icon">
+                            <a href="#">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fab fa-google-plus-g"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3>Final Machine Setup</h3>
+                        <span>ready to be operated</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- team-area end -->
+{% endblock content %}

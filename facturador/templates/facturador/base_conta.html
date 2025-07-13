@@ -1,0 +1,47 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>{% block title %}Título predeterminado{% endblock %}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="manifest" href="{% static 'landing/site.webmanifest' %}">
+        <link rel="apple-touch-icon" href="{% static 'landing/icon.png' %}">
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'landing/img/favicon.png' %}">
+
+        <!-- All css here -->
+        <link rel="stylesheet" href="{% static 'landing/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/fontawesome-all.min.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/slick.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/magnific-popup.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/meanmenu.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/nice-select.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/animate.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/default.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/responsive.css' %}">
+    </head>
+    <body>
+        {% block content %}
+        <!-- Aquí se insertará el contenido específico de cada página -->
+        {% endblock %}
+
+        <!-- All js here -->
+        <script src="{% static 'landing/js/vendor/modernizr-3.5.0.min.js' %}"></script>
+        <script src="{% static 'landing/js/vendor/jquery-1.12.4.min.js' %}"></script>
+        <script src="{% static 'landing/js/popper.min.js' %}"></script>
+        <script src="{% static 'landing/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'landing/js/isotope.pkgd.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.magnific-popup.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.meanmenu.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.nice-select.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.counterup.min.js' %}"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+        <script src="{% static 'landing/js/slick.min.js' %}"></script>
+        <script src="{% static 'landing/js/plugins.js' %}"></script>
+        <script src="{% static 'landing/js/main.js' %}"></script>
+    </body>
+</html>

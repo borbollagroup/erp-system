@@ -1,0 +1,178 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.username }} | Borbolla Group</title>
+    <link rel="stylesheet" href="{% static 'landing/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <a href="/"><h6>Pagina Principal</h6></a>
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" id="profile-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Profile</a>
+                    </li>
+                    {% if employee %}
+                    <li class="nav-item">
+                        <a class="nav-link" id="employee-tab" data-toggle="tab" href="#employee" role="tab" aria-controls="employee" aria-selected="false">Employee</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="profile-tabs-content">
+                    <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="media">
+                            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}" alt="Profile Picture" height="250" width="200">
+                            <div class="media-body">
+                                <h2 class="account-heading">{{ user.username }}</h2>
+                                <p class="text-secondary">
+                                    Name : {{ user.first_name }}<br>
+                                    Surname : {{ user.last_name }}<br>
+                                    Email : {{ user.email }}<br>
+                                    Cellphone : {{ user.profile.cellphone }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% if employee %}
+                    <div class="tab-pane fade" id="employee" role="tabpanel" aria-labelledby="employee-tab">
+                        <h3 class="text-center">Employee Payment Status</h3>
+                        <div class="table-responsive mt-3">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4" class="text-center">FECHA DE PAGO</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4" class="text-center">{{ payment_date }}</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4" class="text-center">RECIBO DE NOMINA SEMANA {{ week_number }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Nombre:</td>
+                                        <td>{{ user.username }}</td>
+                                        <td>Salario diario:</td>
+                                        <td>$ {{ employee.salary }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Puesto:</td>
+                                        <td>{{ employee.position }}</td>
+                                        <td>Dias pagados:</td>
+                                        <td>{{ employee.attendance }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Periodo de pago:</td>
+                                        <td>DEL {{ pay_period_start }} AL {{ pay_period_end }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive mt-3">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Clave</th>
+                                        <th>Concepto</th>
+                                        <th>Percepcion</th>
+                                        <th>Deduccion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td>Salario Normal percibido por el trabajador</td>
+                                        <td>$ {{ normal_salary }}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>Septimo dia</td>
+                                        <td>$ {{ seventh_day }}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>Bono por eficiencia</td>
+                                        <td>$ {{ efficiency_bonus }}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>Bono por puntualidad</td>
+                                        <td>$ {{ punctuality_bonus }}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>Bono por asistencia</td>
+                                        <td>$ {{ attendance_bonus }}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>Horas Extras</td>
+                                        <td>$ {{ overtime }}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>IMSS</td>
+                                        <td></td>
+                                        <td>$ {{ imss }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>Infonavit</td>
+                                        <td></td>
+                                        <td>$ {{ infonavit }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>Prestamos</td>
+                                        <td></td>
+                                        <td>$ {{ loans }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="text-right">Totales</td>
+                                        <td>$ {{ total_perceptions }}</td>
+                                        <td>$ {{ total_deductions }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" class="text-right">Neto Recibido:</td>
+                                        <td>$ {{ net_received }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ u_form|crispy }}
+            {{ p_form|crispy }}
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

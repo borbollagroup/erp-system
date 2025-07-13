@@ -1,0 +1,96 @@
+{% extends 'facturador/base.html' %}
+
+{% block title %}Lista de Facturas{% endblock %}
+
+{% block content %}
+<section id="invoice-list">
+    <h2 class="mb-4">Lista de Facturas</h2>
+    
+    <!-- Search and Filters -->
+    <form method="get" class="mb-4">
+        <div class="form-row">
+            <div class="col-md-3">
+                <input type="text" name="q" class="form-control" placeholder="Buscar por descripción, cliente, ID..." value="{{ request.GET.q }}">
+            </div>
+            <div class="col-md-2">
+                <select name="customer" class="form-control">
+                    <option value="">Todos los clientes</option>
+                    {% for cliente in clientes %}
+                        <option value="{{ cliente.id }}" {% if request.GET.customer == cliente.id %}selected{% endif %}>{{ cliente.legal_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="type" class="form-control">
+                    <option value="">Tipo de Factura</option>
+                    <option value="I" {% if request.GET.type == 'I' %}selected{% endif %}>Ingreso</option>
+                    <option value="E" {% if request.GET.type == 'E' %}selected{% endif %}>Egreso</option>
+                    <option value="P" {% if request.GET.type == 'P' %}selected{% endif %}>Pago</option>
+                    <option value="N" {% if request.GET.type == 'N' %}selected{% endif %}>Nómina</option>
+                    <option value="T" {% if request.GET.type == 'T' %}selected{% endif %}>Traslado</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="payment_method" class="form-control">
+                    <option value="">Método de Pago</option>
+                    <option value="PUE" {% if request.GET.payment_method == 'PUE' %}selected{% endif %}>Pago en una sola exhibición</option>
+                    <option value="PPD" {% if request.GET.payment_method == 'PPD' %}selected{% endif %}>Pago en parcialidades</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Invoices List -->
+    <div class="row">
+        {% for factura in facturas %}
+        <div class="col-md-12 mb-4">
+            <div class="card border-light">
+                <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Factura #{{ factura.folio_number }}</h5>
+                    <span class="badge badge-secondary">{{ factura.type }}</span>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Detalles de la Factura</h6>
+                    <p class="card-text">
+                        <strong>Cliente:</strong> {{ factura.customer.legal_name }}<br>
+                        <strong>RFC Cliente:</strong> {{ factura.customer.tax_id }}<br>
+                        <strong>Total:</strong> ${{ factura.total }}<br>
+                        <strong>Método de Pago:</strong> {{ factura.payment_method }}<br>
+                        <strong>Fecha de Emisión:</strong> {{ factura.date_issued }}<br>
+                    </p>
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center">
+                        <a href="{% url 'ver_factura' factura.id %}" class="btn btn-sm btn-primary">Ver Factura</a>
+                        <a href="{% url 'descargar_factura' factura.id %}" class="btn btn-sm btn-secondary ml-2">Descargar PDF</a>
+                        <a href="{% url 'cancelar_factura' factura.id %}" class="btn btn-sm btn-danger ml-2">Cancelar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if current_page > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ current_page|add:-1 }}&limit={{ request.GET.limit }}&q={{ request.GET.q }}&customer={{ request.GET.customer }}&type={{ request.GET.type }}&payment_method={{ request.GET.payment_method }}">Anterior</a>
+            </li>
+            {% endif %}
+            {% for page in page_range %}
+            <li class="page-item {% if page == current_page %}active{% endif %}">
+                <a class="page-link" href="?page={{ page }}&limit={{ request.GET.limit }}&q={{ request.GET.q }}&customer={{ request.GET.customer }}&type={{ request.GET.type }}&payment_method={{ request.GET.payment_method }}">{{ page }}</a>
+            </li>
+            {% endfor %}
+            {% if current_page < total_pages %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ current_page|add:1 }}&limit={{ request.GET.limit }}&q={{ request.GET.q }}&customer={{ request.GET.customer }}&type={{ request.GET.type }}&payment_method={{ request.GET.payment_method }}">Siguiente</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</section>
+{% endblock %}

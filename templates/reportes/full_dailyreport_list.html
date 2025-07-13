@@ -1,0 +1,94 @@
+{% extends "reportes/base.html" %}
+{% block title %}All Active Projects & Reports{% endblock %}
+{% block header_subtitle %}Browse by client → project → daily report{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h2>All Active Projects & Reports</h2>
+  <div class="accordion" id="clientAccordion">
+    {% for client in clients %}
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="clientHeading{{ client.pk }}">
+          <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#clientCollapse{{ client.pk }}"
+                  aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                  aria-controls="clientCollapse{{ client.pk }}">
+            {{ client.legal_name }} &mdash; {{ client.tax_id }}
+          </button>
+        </h2>
+        <div id="clientCollapse{{ client.pk }}"
+             class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
+             aria-labelledby="clientHeading{{ client.pk }}"
+             data-bs-parent="#clientAccordion">
+          <div class="accordion-body">
+
+            {% if client.active_projects %}
+              <div class="accordion" id="projectAccordion{{ client.pk }}">
+                {% for project in client.active_projects %}
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="projHeading{{ project.pk }}">
+                      <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#projCollapse{{ project.pk }}"
+                              aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                              aria-controls="projCollapse{{ project.pk }}">
+                        {{ project.name }} — {{ project.location_city }} 
+                        <small class="text-muted">({{ project.contract_number|default:"—" }})</small>
+                      </button>
+                    </h2>
+
+                    <div id="projCollapse{{ project.pk }}"
+                         class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
+                         aria-labelledby="projHeading{{ project.pk }}"
+                         data-bs-parent="#projectAccordion{{ client.pk }}">
+                      <div class="accordion-body">
+
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                          <h5 class="mb-0">Recent Reports</h5>
+                          <a href="{% url 'reportes:dailyreport_list' project.pk %}"
+                             class="btn btn-sm btn-outline-primary">
+                            View All Reports
+                          </a>
+                        </div>
+
+                        {% if project.reports %}
+                          <ul class="list-group">
+                            {% for report in project.reports %}
+                              <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                  <a href="{% url 'reportes:dailyreport_detail' report.pk %}">
+                                    {{ report.date }}
+                                  </a>
+                                  <small class="text-muted">
+                                    by {{ report.created_by.get_full_name|default:report.created_by }}
+                                  </small>
+                                </div>
+                                <span class="badge bg-secondary">
+                                  {{ report.temp_c }}°C, {{ report.condition }}
+                                </span>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% else %}
+                          <p class="text-muted">No reports yet for this project.</p>
+                        {% endif %}
+
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p class="text-muted">No active projects for this client.</p>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

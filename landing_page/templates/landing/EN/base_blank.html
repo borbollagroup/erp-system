@@ -1,0 +1,352 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="zxx">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        {% if title %}
+            {% if user.is_authenticated %}
+                <title>{{ user.username }} | Borbolla Group - {{ title }}</title>
+            {% else %}
+            <title>Borbolla Group - {{ title }}</title>
+            {% endif %}
+        {% else %}
+            <title>Borbolla Group</title>
+        {% endif %}
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        
+        <link rel="apple-touch-icon" href="icon.png">
+        <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <!-- All css here -->
+        <link rel="stylesheet" href="{% static 'landing/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/fontawesome-all.min.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/slick.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/magnific-popup.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/meanmenu.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/nice-select.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/animate.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/default.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/responsive.css' %}">
+    </head>
+    <body>
+        <!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+
+       <!-- header start -->
+       <header class="transparent-header">
+           <div class="header-top-area header-white">
+               <div class="container">
+                   <div class="row">
+                       <div class="col-xl-6 col-lg-6 col-md-6 col-6 d-flex align-items-center">
+                           <div class="language f-left">
+                               <ul>
+                                   
+                                        
+                                    </ul>
+                                </li>
+                               </ul>
+                           </div>
+                           <div class="social-icon f-left d-none d-md-block">
+                               
+                           </div>
+                       </div>
+                       <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                           <div class="header-right f-right">
+                               <ul>
+                                   <li><a href="#"><i class="fas fa-search"></i></a>
+                                        <div class="search-form">
+                                            <form action="#">
+                                                <input type="text" placeholder="Search">
+                                                <button><i class="fas fa-search"></i></button>
+                                            </form>
+                                        </div>
+                                    </li>
+                                   <li><a href="#"><i class="fas fa-shopping-cart"></i></a></li>
+                                   <li class="info-bar"><a href="#"><i class="fas fa-bars"></i></a></li>
+                               </ul>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+           <div class="extra-info">
+                <div class="close-icon">
+                    <button><i class="far fa-window-close"></i></button>
+                </div>
+               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+               Ut enim ad minim veniam, quis nostrudexe rc itation ullamco laboris nisi ut aliquip ex ea com modo consequat. Duis aute irure.</p>
+               <div class="instagram">
+                   <a href="#"><img src="{% static 'landing/img/instagram/insta1.png' %}" alt=""></a>
+                   <a href="#"><img src="{% static 'landing/img/instagram/insta2.png' %}" alt=""></a>
+                   <a href="#"><img src="{% static 'landing/img/instagram/insta3.png' %}" alt=""></a>
+                   <a href="#"><img src="{% static 'landing/img/instagram/insta4.png' %}" alt=""></a>
+                   <a href="#"><img src="{% static 'landing/img/instagram/insta5.png' %}" alt=""></a>
+                   <a href="#"><img src="{% static 'landing/img/instagram/insta6.png' %}" alt=""></a>
+               </div>
+                <div class="social-icon-right mt-30">
+                    <a href="#">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#">
+                        <i class="fab fa-google-plus-g"></i>
+                    </a>
+                    <a href="#">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+           </div>
+           <div class="header-bottom-area">
+               <div class="container width-100-xs">
+                   <div class="white-menu white-bg">
+                        <div class="row align-items-center">
+                            <div class="col-xl-3 col-lg-3">
+                                <div class="logo">
+                                    <a href="{% url 'landing-page-home' %}">
+                                        <img src="{% static 'landing/img/logo/logo.png' %}" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-xl-9 col-lg-9">
+                                <div class="header-button f-right d-none d-xl-block">
+                                    {% if user.is_authenticated %}
+                                        <a>
+                                            <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" style="border: none; background: none; color: inherit; padding: 0; font: inherit; cursor: pointer;">Logout</button>
+                                            </form>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'login' %}">Login</a>
+                                        
+                                    {% endif %}
+
+                                </div>
+                                <div class="main-menu f-right">
+                                    <nav id="mobile-menu">
+                                        <ul>
+                                            <li>
+                                                <a href="/">Home</a>
+                                            </li>
+                                            {% if user.is_authenticated %}
+                                            {% if user.is_superuser %}
+                                                <li>
+                                                    <a href="/admin">Admin Panel</a>
+                                                </li>
+                                            {% endif %}
+                                            {% if user.is_staff %}
+                                            <li>
+                                                <a href="/">Apps</a>
+                                                <ul class="submenu">
+                                                    <li>
+                                                        <a href="#">Facturador (pending)</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Asistencia (pending)</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Banco STP(pending)</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Pre-Cierre (pending)</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Proyectos (pending)</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                                <li>
+                                                    <a href="{% url 'profile' %}">Profile</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'blog' %}">Intern Blog</a>
+                                                    <ul class="submenu">
+                                                        <li>
+                                                            <a href="{% url 'post-create' %}">Create Post</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            {% endif %}
+                                        {% else %}
+                                                <li>
+                                                    <a href="/register">Register</a>
+                                                </li>
+                                            
+                                        {% endif %}
+                                            
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <div class="mobile-menu"></div>
+                            </div>
+                        </div>
+                   </div>
+               </div>
+           </div>
+       </header>
+        <!-- header end -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}
+
+        {% endblock content %}
+        <!-- bran area start -->
+        <div class="brand-area gray-bg">
+            <div class="container">
+                <div class="brand-active pt-50 pb-50">
+                    <div class="single-brand">
+                        <a href="#">
+                            <img src="{% static 'landing/img/brand/brand1.png' %}" alt="">
+                        </a>
+                    </div>
+                    <div class="single-brand">
+                        <a href="#">
+                            <img src="{% static 'landing/img/brand/brand2.png' %}" alt="">
+                        </a>
+                    </div>
+                    <div class="single-brand">
+                        <a href="#">
+                            <img src="{% static 'landing/img/brand/brand3.png' %}" alt="">
+                        </a>
+                    </div>
+                    <div class="single-brand">
+                        <a href="#">
+                            <img src="{% static 'landing/img/brand/brand4.png' %}" alt="">
+                        </a>
+                    </div>
+                    <div class="single-brand">
+                        <a href="#">
+                            <img src="{% static 'landing/img/brand/brand5.png' %}" alt="">
+                        </a>
+                    </div>
+                    <div class="single-brand">
+                        <a href="#">
+                            <img src="{% static 'landing/img/brand/brand1.png' %}" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- bran area end -->
+        <!-- footer start -->
+        <footer>
+            <div class="widget-area black-bg black-footer pt-90 pb-60">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-3 col-md-4 mb-30">
+                            <div class="footer-widget">
+                                <h3>Contact Us</h3>
+                                <ul class="footer-info">
+                                    <li>+1 (956) 261-5885    </li>
+                                    <li>customer-support@borbollagroup.com</li>
+                                    <li>319 E Comma Ave. suite 274 , Hidalgo , TX</li>
+                                    <li>Zip 78557, US</li>
+                                    <li>Open hours: 8.00-18.00 Mon-Fri</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-5 col-md-3 mb-30">
+                            <div class="footer-widget">
+                                <h3>Usefull links</h3>
+                                <ul class="footer-link">
+                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="#">About Us</a></li>
+                                    <li><a href="#">Services</a></li>
+                                    <li><a href="#">Single Service</a></li>
+                                    <li><a href="#">Work</a></li>
+                                    <li><a href="#">Blogs</a></li>
+                                    <li><a href="#">Contact</a></li>
+                                    <li><a href="#">Support Career</a></li>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-5 mb-30">
+                            <div class="footer-widget">
+                                <h3>Our Newsletter</h3>
+                                <p>Subscribe to our mailing list to get the up dates to your email inbox.</p>
+                                <form action="#">
+                                    <input type="email" placeholder="E-mail">
+                                    <button style="color: white;">Subscribe</button>
+                                </form>
+                                <div class="footer-icon mt-30">
+                                    <a href="#">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fab fa-google-plus-g"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fab fa-instagram"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright-area black-copyright pt-25 pb-25">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-4">
+                            <div class="copyright-text text-left ">
+                                <p>Copyright ©2018 Borbolla Automation Incorporated</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-8">
+                            <div class="footer-menu text-left text-md-right">
+                                <nav>
+                                    <ul>
+                                        <li><a href="#">About</a></li>
+                                        <li><a href="#">Contact Us</a></li>
+                                        <li><a href="#">Term & Conditions</a></li>
+                                        <li><a href="#">Privacy Policy</a></li>
+                                        <li><a href="#">Sites Map</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- footer end -->
+
+
+
+        <!-- All js here -->
+        <script src="{% static 'landing/js/vendor/modernizr-3.5.0.min.js' %}"></script>
+        <script src="{% static 'landing/js/vendor/jquery-1.12.4.min.js' %}"></script>
+        <script src="{% static 'landing/js/popper.min.js' %}"></script>
+        <script src="{% static 'landing/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'landing/js/isotope.pkgd.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.magnific-popup.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.meanmenu.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.nice-select.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.counterup.min.js' %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+
+        <script src="{% static 'landing/js/slick.min.js' %}"></script>
+        <script src="{% static 'landing/js/plugins.js' %}"></script>
+        <script src="{% static 'landing/js/main.js' %}"></script>
+    </body>
+</html>

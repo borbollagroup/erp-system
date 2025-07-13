@@ -1,0 +1,125 @@
+{% extends 'facturador/base.html' %}
+
+{% block title %}Lista de Clientes{% endblock %}
+
+{% block content %}
+<section id="client-list">
+    <h2 class="mb-4">Lista de Clientes para {{ organization.legal_name }}</h2>
+    
+    <!-- Toggle between test and live environment -->
+    <div class="mb-4">
+        <a href="?is_test=false{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" 
+           class="btn {% if not is_test %}btn-primary{% else %}btn-secondary{% endif %}">Live</a>
+        <a href="?is_test=true{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" 
+           class="btn {% if is_test %}btn-primary{% else %}btn-secondary{% endif %}">Test</a>
+    </div>
+
+    <!-- Search form -->
+    <div class="mb-4">
+        <form method="get" action="">
+            <input type="hidden" name="is_test" value="{{ is_test }}">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Buscar por Nombre Fiscal o RFC" value="{{ request.GET.q }}">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Buscar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {% if clientes %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre Fiscal</th>
+                <th>RFC</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td>{{ cliente.legal_name }}</td>
+                <td>{{ cliente.tax_id }}</td>
+                <td>{{ cliente.phone }}</td>
+                <td>{{ cliente.email }}</td>
+                <td>
+                    <a href="{% url 'listar_facturas' organization.organization_id %}?customer={{ cliente.id }}" class="btn btn-sm btn-primary">Listar Facturas</a>
+                    <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#editClienteModal{{ cliente.id }}">Editar Cliente</button>
+                    <a href="{% url 'eliminar_cliente' cliente.id %}?is_test={{ is_test }}" class="btn btn-sm btn-danger">Eliminar Cliente</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <nav>
+        <ul class="pagination">
+            {% if current_page > 1 %}
+                {% for page in page_range %}
+                    <li class="page-item {% if page == current_page %}active{% endif %}">
+                        <a class="page-link" href="?page={{ page }}&limit={{ request.GET.limit }}&is_test={{ is_test }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ page }}</a>
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </nav>
+
+    {% else %}
+    <p>No se encontraron clientes.</p>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{% url 'listar_organizaciones' %}" class="btn btn-primary">Volver a Organizaciones</a>
+    </div>
+</section>
+
+<!-- Modals for editing clients -->
+{% for cliente in clientes %}
+<div class="modal fade" id="editClienteModal{{ cliente.id }}" tabindex="-1" role="dialog" aria-labelledby="editClienteModalLabel{{ cliente.id }}" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form method="post" action="{% url 'editar_cliente' cliente.id %}?is_test={{ is_test }}">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="editClienteModalLabel{{ cliente.id }}">Editar Cliente</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="legal_name">Nombre Fiscal</label>
+            <input type="text" class="form-control" id="legal_name" name="legal_name" value="{{ cliente.legal_name }}" required>
+          </div>
+          <div class="form-group">
+            <label for="tax_id">RFC</label>
+            <input type="text" class="form-control" id="tax_id" name="tax_id" value="{{ cliente.tax_id }}" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ cliente.email }}" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Teléfono</label>
+            <input type="text" class="form-control" id="phone" name="phone" value="{{ cliente.phone }}" required>
+          </div>
+          <div class="form-group">
+            <label for="street">Calle</label>
+            <input type="text" class="form-control" id="street" name="address[street]" value="{{ cliente.address.street }}" required>
+          </div>
+          <!-- Add other address fields similarly -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

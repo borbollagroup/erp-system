@@ -1,0 +1,315 @@
+{% extends "reportes/base.html" %}
+{% load static %}
+
+{% block title %}Daily Work Report{% endblock %}
+{% block header_subtitle %}Create a new daily work report{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" id="report-form" novalidate>
+  {% csrf_token %}
+
+  <section class="container-fluid p-2 p-md-4">
+
+    <!-- Project Selection -->
+    <div class="section-title">Select Project</div>
+    <div class="table-responsive mb-4">
+      <table class="table">
+        <tr>
+          <th>Project <span class="text-danger">*</span></th>
+          <td>
+            <select name="project" id="id_project" class="form-select" required>
+              <option value="" disabled selected>Choose a project...</option>
+              {% for project in projects %}
+                <option value="{{ project.pk }}">{{ project.name }} - {{ project.client }}</option>
+              {% endfor %}
+            </select>
+            <div class="invalid-feedback">Please select a project.</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Dynamic Tables -->
+    <div class="row g-4">
+      <!-- Manpower Usage -->
+      <div class="col-12 col-md-6">
+        <div class="section-title">Manpower Usage</div>
+        <div class="table-responsive">
+          <table id="manpower-table" class="table table-bordered table-sm">
+            <thead class="table-light"><tr><th>Role *</th><th>Qty</th><th>Hours</th><th>Comments</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td><input type="text" class="form-control form-control-sm" value="Project Manager" required></td>
+                <td><input type="number" class="form-control form-control-sm" min="0" value="0" required></td>
+                <td><input type="number" class="form-control form-control-sm" min="0" value="9" required></td>
+                <td><input type="text" class="form-control form-control-sm"></td>
+                <td class="text-center"><button type="button" class="btn btn-sm btn-danger remove-row">−</button></td>
+              </tr>
+	      <tr>
+                <td><input type="text" class="form-control form-control-sm" value="Supervisor" required></td>
+                <td><input type="number" class="form-control form-control-sm" value="1" min="0" required></td>
+                <td><input type="number" class="form-control form-control-sm" min="0" value="9" required></td>
+                <td><input type="text" class="form-control form-control-sm"></td>
+                <td class="text-center"><button type="button" class="btn btn-sm btn-danger remove-row">−</button></td>
+              </tr>
+              <tr>
+                <td><input type="text" class="form-control form-control-sm" value="Worker" required></td>
+                <td><input type="number" class="form-control form-control-sm" min="0" value="0" required></td>
+                <td><input type="number" class="form-control form-control-sm" min="0" value="9" required></td>
+                <td><input type="text" class="form-control form-control-sm"></td>
+                <td class="text-center"><button type="button" class="btn btn-sm btn-danger remove-row">−</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button type="button" id="add-manpower" class="btn btn-outline-primary btn-sm mt-2">Add Row</button>
+      </div>
+
+      <!-- Equipment Usage -->
+      <div class="col-12 col-md-6">
+        <div class="section-title">Equipment Usage</div>
+        <div class="table-responsive">
+          <table id="equipment-table" class="table table-bordered table-sm">
+            <thead class="table-light"><tr><th>Equipment</th><th>Qty</th><th>Hours Used</th><th>Comments</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td><input type="text" class="form-control form-control-sm" value="lifter" required></td>
+                <td><input type="number" class="form-control form-control-sm" min="0" max="15" value="0" required></td>
+                <td><input type="number" class="form-control form-control-sm" min="0" max="24" value="0" required></td>
+                <td><input type="text" class="form-control form-control-sm"></td>
+                <td class="text-center"><button type="button" class="btn btn-sm btn-danger remove-row">−</button></td>
+              </tr>
+              <tr>
+                <td><input type="text" class="form-control form-control-sm" value="forklift 7.5T" required></td>
+                <td><input type="number" class="form-control form-control-sm" min="0" max="15" value="0" required></td>
+                <td><input type="number" class="form-control form-control-sm" min="0" max="24" value="0" required></td>
+                <td><input type="text" class="form-control form-control-sm"></td>
+                <td class="text-center"><button type="button" class="btn btn-sm btn-danger remove-row">−</button></td>
+              </tr>
+              <tr>
+                <td><input type="text" class="form-control form-control-sm" value="forklift 17T" required></td>
+                <td><input type="number" class="form-control form-control-sm" min="0" max="15" value="0" required></td>
+                <td><input type="number" class="form-control form-control-sm" min="0" max="24" value="0" required></td>
+                <td><input type="text" class="form-control form-control-sm"></td>
+                <td class="text-center"><button type="button" class="btn btn-sm btn-danger remove-row">−</button></td>
+              </tr>
+	      <tr>
+                <td><input type="text" class="form-control form-control-sm" value="crane 15T" required></td>
+                <td><input type="number" class="form-control form-control-sm" min="0" max="15" value="0" required></td>
+                <td><input type="number" class="form-control form-control-sm" min="0" max="24" value="0" required></td>
+                <td><input type="text" class="form-control form-control-sm"></td>
+                <td class="text-center"><button type="button" class="btn btn-sm btn-danger remove-row">−</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button type="button" id="add-equipment" class="btn btn-outline-primary btn-sm mt-2">Add Row</button>
+      </div>
+
+      <!-- Activities -->
+      <div class="col-12">
+        <div class="section-title">Activities</div>
+        <div class="table-responsive">
+          <table id="activities-table" class="table table-bordered table-sm">
+            <thead class="table-light"><tr><th>Activity</th><th>Qty</th><th>Unit</th><th>Description</th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td><input type="text" class="form-control form-control-sm" value="Installation according to WBS" required></td>
+                <td><input type="number" class="form-control form-control-sm" min="0" max="99999" value="1" required></td>
+                <td><input type="text" class="form-control form-control-sm" value="lot" required></td>
+                <td><input type="text" class="form-control form-control-sm" ></td>
+                <td class="text-center"><button type="button" class="btn btn-sm btn-danger remove-row">−</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button type="button" id="add-activities" class="btn btn-outline-primary btn-sm mt-2">Add Row</button>
+      </div>
+    </div>
+
+    <!-- Photo Uploader -->
+    <div id="photo-uploader" class="photo-controls mb-4">
+      <div id="drop-zone" class="border border-secondary rounded p-3 text-center" style="cursor: pointer;">
+        Drag & drop photos here or <button type="button" id="browse-btn" class="btn btn-link p-0">browse</button>
+      </div>
+      <input type="file" id="photo-input" accept="image/*" multiple hidden>
+      <div id="photo-preview" class="d-flex flex-wrap mt-3 gap-2"></div>
+    </div>
+
+    <!-- Hidden payload -->
+    <input type="hidden" name="payload" id="id_payload">
+
+    <div class="text-end mt-4">
+      <button type="submit" class="btn btn-success btn-lg">Save Report</button>
+    </div>
+
+  </section>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function getCookie(name) {
+  let cookieValue = null;
+  document.cookie.split(';').forEach(c => {
+    const [key, val] = c.trim().split('=');
+    if (key === name) cookieValue = decodeURIComponent(val);
+  });
+  return cookieValue;
+}
+
+(function() {
+  const form = document.getElementById('report-form');
+  const tableIds = ['manpower', 'equipment', 'activities'];
+
+  // — ADD / REMOVE ROWS —
+  tableIds.forEach(pref => {
+    const tbl = document.getElementById(pref + '-table');
+    const addBtn = document.getElementById('add-' + pref);
+    const tbody = tbl.querySelector('tbody');
+    const templateRow = tbody.querySelector('tr').cloneNode(true);
+
+    function attachRemove(row) {
+      row.querySelectorAll('.remove-row').forEach(btn => {
+        btn.onclick = () => {
+          if (tbody.rows.length > 1) row.remove();
+        };
+      });
+    }
+
+    tbody.querySelectorAll('tr').forEach(attachRemove);
+
+    addBtn.onclick = () => {
+      const newRow = templateRow.cloneNode(true);
+      newRow.querySelectorAll('input').forEach(i => i.value = '');
+      attachRemove(newRow);
+      tbody.appendChild(newRow);
+    };
+  });
+
+  // — PHOTO HANDLING —
+  const photos = [];
+  const dropZone = document.getElementById('drop-zone');
+  const browseBtn = document.getElementById('browse-btn');
+  const fileInput = document.getElementById('photo-input');
+  const preview = document.getElementById('photo-preview');
+
+  async function compress(file) {
+    return new Promise(res => {
+      const img = new Image();
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      img.onload = () => {
+        let w = img.width, h = img.height, max = 1024;
+        if (w > h && w > max) {
+          h = h * max / w; w = max;
+        } else if (h > max) {
+          w = w * max / h; h = max;
+        }
+        canvas.width = w;
+        canvas.height = h;
+        ctx.drawImage(img, 0, 0, w, h);
+        canvas.toBlob(blob => {
+          res(new File([blob], file.name, { type: 'image/jpeg' }));
+        }, 'image/jpeg', 0.7);
+      };
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
+  function renderPhoto(file) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'position-relative m-1';
+    wrapper.style.width = '100px';
+    wrapper.style.height = '100px';
+
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'cover';
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.innerHTML = '×';
+    btn.className = 'btn btn-sm btn-danger position-absolute';
+    btn.style.top = '2px';
+    btn.style.right = '2px';
+    btn.onclick = () => {
+      photos.splice(photos.indexOf(file), 1);
+      wrapper.remove();
+    };
+
+    wrapper.append(img, btn);
+    preview.append(wrapper);
+  }
+
+  dropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropZone.classList.add('bg-light');
+  });
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('bg-light');
+  });
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('bg-light');
+    Array.from(e.dataTransfer.files).forEach(async f => {
+      const c = await compress(f);
+      photos.push(c);
+      renderPhoto(c);
+    });
+  });
+
+  browseBtn.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => {
+    Array.from(fileInput.files).forEach(async f => {
+      const c = await compress(f);
+      photos.push(c);
+      renderPhoto(c);
+    });
+  });
+
+  // — FORM SUBMISSION —
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      form.classList.add('was-validated');
+      return;
+    }
+
+    // Build payload
+    const data = { project: document.getElementById('id_project').value };
+    tableIds.forEach(pref => {
+      data[pref] = [];
+      Array.from(document.querySelectorAll(`#${pref}-table tbody tr`)).forEach(tr => {
+        const vals = Array.from(tr.querySelectorAll('input'))
+                          .map(i => i.value.trim());
+        if (vals.some(v => v)) data[pref].push(vals);
+      });
+    });
+    document.getElementById('id_payload').value = JSON.stringify(data);
+
+    // FormData including photos
+    const formData = new FormData(form);
+    photos.forEach(f => formData.append('photos', f, f.name));
+
+    // POST
+    const resp = await fetch(location.href, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'X-CSRFToken': getCookie('csrftoken') },
+      body: formData
+    });
+
+    if (resp.ok) {
+      // Redirect to the reports list for this project
+      window.location.href = `/reportes/project/${data.project}/reports/`;
+    } else {
+      const err = await resp.text();
+      alert(`Error saving report: ${err}`);
+    }
+  });
+})();
+</script>
+{% endblock %}

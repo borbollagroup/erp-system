@@ -1,0 +1,156 @@
+{% extends "reportes/base.html" %}
+{% block title %}{% if object %}Edit{% else %}Add{% endif %} Client{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h2>{% if object %}Edit{% else %}Add{% endif %} Client</h2>
+
+  <form id="client-form" novalidate>
+    <div class="row g-3 mb-4">
+      <div class="col-md-6 form-floating">
+        <input id="legal_name"    class="form-control" placeholder="Legal Name"    value="{{ object.legal_name|default:'' }}" required>
+        <label for="legal_name">Legal Name</label>
+      </div>
+      <div class="col-md-6 form-floating">
+        <input id="tax_id"        class="form-control" placeholder="Tax ID"         value="{{ object.tax_id|default:'' }}" required>
+        <label for="tax_id">Tax ID</label>
+      </div>
+      <div class="col-md-6 form-floating">
+        <input id="email"         type="email" class="form-control" placeholder="Email"      value="{{ object.email|default:'' }}">
+        <label for="email">Email</label>
+      </div>
+      <div class="col-md-6 form-floating">
+        <input id="phone"         class="form-control" placeholder="Phone"            value="{{ object.phone|default:'' }}">
+        <label for="phone">Phone</label>
+      </div>
+    </div>
+
+    <hr class="my-4">
+    <h5>Contacts</h5>
+    <div id="contacts-forms">
+      {% for c in object.contacts.all %}
+      <div class="row g-3 align-items-end mb-2 contact-row">
+        <input type="hidden" class="contact-id" value="{{ c.pk }}">
+        <div class="col-md-3 form-floating">
+          <input class="form-control contact-name" placeholder="Name" value="{{ c.name }}" required>
+          <label>Name</label>
+        </div>
+        <div class="col-md-3 form-floating">
+          <input type="email" class="form-control contact-email" placeholder="Email" value="{{ c.email }}">
+          <label>Email</label>
+        </div>
+        <div class="col-md-2 form-floating">
+          <input class="form-control contact-phone" placeholder="Phone" value="{{ c.phone }}">
+          <label>Phone</label>
+        </div>
+        <div class="col-md-2 form-floating">
+          <input class="form-control contact-role" placeholder="Role" value="{{ c.role }}">
+          <label>Role</label>
+        </div>
+        <div class="col-md-1 text-center">
+          <button type="button" class="btn btn-sm btn-outline-danger remove-contact">&times;</button>
+        </div>
+      </div>
+      {% endfor %}
+
+      {% if not object %}
+      {# on “Create” start with one empty row #}
+      <div class="row g-3 align-items-end mb-2 contact-row">
+        <input type="hidden" class="contact-id" value="">
+        <div class="col-md-3 form-floating">
+          <input class="form-control contact-name" placeholder="Name" required>
+          <label>Name</label>
+        </div>
+        <div class="col-md-3 form-floating">
+          <input type="email" class="form-control contact-email" placeholder="Email">
+          <label>Email</label>
+        </div>
+        <div class="col-md-2 form-floating">
+          <input class="form-control contact-phone" placeholder="Phone">
+          <label>Phone</label>
+        </div>
+        <div class="col-md-2 form-floating">
+          <input class="form-control contact-role" placeholder="Role">
+          <label>Role</label>
+        </div>
+        <div class="col-md-1 text-center">
+          <button type="button" class="btn btn-sm btn-outline-danger remove-contact">&times;</button>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <button type="button" class="btn btn-link mb-4" id="add-contact">+ Add Contact</button>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-success me-2">Save Client</button>
+      <a href="{% url 'reportes:client_list' %}" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function(){
+  const clientId = {{ object.pk|default:"null" }};
+  // add row
+  document.getElementById('add-contact').onclick = ()=>{
+    const tpl = document.querySelector('.contact-row').cloneNode(true);
+    tpl.querySelectorAll('input').forEach(i=>{
+      if (i.classList.contains('contact-id')) i.value = '';
+      else i.value = '';
+    });
+    document.getElementById('contacts-forms').appendChild(tpl);
+  };
+  // remove row
+  document.getElementById('contacts-forms').onclick = e=>{
+    if (e.target.matches('.remove-contact')) {
+      e.target.closest('.contact-row').remove();
+    }
+  };
+  // helper to read cookie
+  function getCookie(name) {
+    return document.cookie.split('; ')
+      .map(c=>c.split('='))
+      .reduce((a,[k,v])=>(k===name?a=decodeURIComponent(v):a), '');
+  }
+  // submit JSON
+  document.getElementById('client-form').onsubmit = e=>{
+    e.preventDefault();
+    const data = {
+      legal_name: document.getElementById('legal_name').value,
+      tax_id:     document.getElementById('tax_id').value,
+      email:      document.getElementById('email').value,
+      phone:      document.getElementById('phone').value,
+      contacts: []
+    };
+    document.querySelectorAll('.contact-row').forEach(r=>{
+      data.contacts.push({
+        id:    r.querySelector('.contact-id').value||null,
+        name:  r.querySelector('.contact-name').value,
+        email: r.querySelector('.contact-email').value,
+        phone: r.querySelector('.contact-phone').value,
+        role:  r.querySelector('.contact-role').value
+      });
+    });
+    fetch(window.location.pathname, {
+      method: 'POST',
+      headers: {
+        'Content-Type':'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+      body: JSON.stringify(data)
+    })
+    .then(r=>r.json())
+    .then(resp=>{
+      if (resp.status==='ok') {
+        window.location.href = "{% url 'reportes:client_list' %}";
+      } else {
+        alert('Error: '+(resp.error||'unknown'));
+      }
+    });
+  };
+})();
+</script>
+{% endblock %}

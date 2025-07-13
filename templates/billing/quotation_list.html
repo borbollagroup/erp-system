@@ -1,0 +1,123 @@
+{% extends "reportes/base.html" %}
+{% load static humanize %}
+{% block title %}Quotations by Client{% endblock %}
+{% block header_subtitle %}All Active Quotations Grouped by Client{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+  <!-- Page Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Quotations</h2>
+    <div>
+      <a href="{% url 'reportes:project_add' %}" class="btn btn-outline-secondary me-2">
+        <i class="bi bi-folder-plus"></i> New Project
+      </a>
+      <a href="{% url 'billing:quotation_add' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> New Quotation
+      </a>
+    </div>
+  </div>
+
+  {% if clients_list %}
+    {% for grp in clients_list %}
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">{{ grp.client }}</h5>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Quotation #</th>
+                  <th>Project</th>
+                  <th class="text-end">Total</th>
+                  <th>Issued</th>
+                  <th>Valid Until</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for qt in grp.quotations %}
+                <tr>
+                  <td>
+                    <a href="{% url 'billing:quotation_detail' qt.pk %}" class="text-decoration-none">
+                      {{ qt.number }}
+                    </a>
+                  </td>
+                  <td>{{ qt.project }}</td>
+                  <td class="text-end">{{ qt.total_amount|floatformat:2|intcomma }}</td>
+                  <td>{{ qt.date_issued|date:"Y-m-d" }}</td>
+                  <td>{{ qt.valid_until|date:"Y-m-d" }}</td>
+                  <td class="text-end align-middle">
+                    <!-- Edit -->
+                    <a href="{% url 'billing:quotation_edit' qt.pk %}"
+                       class="btn btn-sm btn-outline-secondary me-1"
+                       title="Edit"
+                       onclick="return confirm('Edit this quotation?');">
+                      <i class="bi bi-pencil-fill">Edit</i>
+                    </a>
+
+                    <!-- Delete -->
+                    <a href="{% url 'billing:quotation_delete' qt.pk %}"
+                       class="btn btn-sm btn-outline-danger me-1"
+                       title="Delete"
+                       onclick="return confirm('Really delete this quotation?');">
+                      <i class="bi bi-trash-fill">Delete</i>
+                    </a>
+
+                    <!-- Send / Sent -->
+                    <form method="post"
+                          action="{% url 'billing:quotation_send' qt.pk %}"
+                          class="d-inline"
+                          onsubmit="return confirm('Send this quotation to the selected contacts?');">
+                      {% csrf_token %}
+                      {% if qt.email_sent %}
+                        <button type="submit"
+                                class="btn btn-sm btn-secondary"
+                                >
+                          <i class="bi bi-envelope-fill"></i> Sent
+                        </button>
+                      {% else %}
+                        <button type="submit"
+                                class="btn btn-sm btn-success">
+                          <i class="bi bi-envelope"></i> Send
+                        </button>
+                      {% endif %}
+                    </form>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot class="table-light">
+                <tr>
+                  <td colspan="2" class="text-end fw-bold">Client Subtotal:</td>
+                  <td class="text-end fw-bold">{{ grp.subtotal|floatformat:2|intcomma }}</td>
+                  <td colspan="3"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="alert alert-info">
+      <p><strong>No active quotations.</strong></p>
+
+      {% if contacts %}
+        <p>Please verify your notification contacts:</p>
+        <ul class="mb-0">
+          {% for c in contacts %}
+            <li>{{ c.name }} &lt;{{ c.email }}&gt;</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p><em>No contacts defined.</em></p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{# reportes/templates/reportes/export_reports.html #}
+{% extends "reportes/base.html" %}
+{% block title %}Export Reports{% endblock %}
+
+{% block content %}
+<main class="container py-4">
+  <h2>Select Projects to Export</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      {% for p in projects %}
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="projects" id="proj{{ p.id }}"
+               value="{{ p.id }}">
+        <label class="form-check-label" for="proj{{ p.id }}">
+          {{ p.name }} ({{ p.client.legal_name }}) — ends {{ p.end_date }}
+        </label>
+      </div>
+      {% empty %}
+      <p class="text-muted">No active projects available.</p>
+      {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary">
+      Download Excel
+    </button>
+  </form>
+</main>
+{% endblock %}
+<style>
+  /* Spinner overlay — hidden by default */
+  #loading-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255,255,255,0.8);
+    display: none;               /* hide initially */
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  .spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #0d3b66;  /* your company blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+</style>
+
+<div id="loading-overlay">
+  <div class="spinner"></div>
+</div>
+
+<form id="export-form" method="post" action="{% url 'reportes:export_project_reports' %}">
+  {% csrf_token %}
+  <!-- your project checkboxes, submit button, etc. -->
+  <button type="submit" class="btn btn-primary">Export Reports</button>
+</form>
+
+<script>
+  document
+    .getElementById('export-form')
+    .addEventListener('submit', function(){
+      document.getElementById('loading-overlay').style.display = 'flex';
+    });
+</script>
+
+{ % block extra_js % }
+
+{ % endblock % }

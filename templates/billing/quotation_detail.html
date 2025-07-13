@@ -1,0 +1,576 @@
+{% extends "reportes/base.html" %}
+{% block title %}Quotation {{ quotation.number }} {% endblock %}
+{% load static humanize %}
+
+{% block extra_css %}
+<style>
+  /* tighten top padding */
+  main { padding-top: 2rem; padding-bottom: 2rem; }
+
+  /* summary table */
+  .summary-table th,
+  .summary-table td {
+    font-size: 1.1rem;
+  }
+  .summary-table tbody tr:last-child td {
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-top: 2px solid #333;
+  }
+
+  /* terms & gantt */
+  .terms-table th,
+  .terms-table td { vertical-align: middle; }
+
+  /* uniform card margins */
+  .card { margin-bottom: 1.5rem; }
+
+  /* hide interactive controls when printing */
+  @media print {
+    .no-print { display: none!important; }
+    .page-break { display: block!important; page-break-before: always; }
+    .row.mb-4 {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+    }
+    .row.mb-4 > [class*="col-"] {
+      flex: 0 0 33.3333% !important;
+      max-width: 33.3333% !important;
+    }
+  }
+  .page-break { display: none; }
+  main {
+      font-size: 20px !important;
+    }
+
+</style>
+{% endblock %}
+
+{% block header_title %}Quotation {{ quotation.number }} {% endblock %}
+{% block header_subtitle %} {{ grand_total|floatformat:"-0"|intcomma }} {% endblock %}
+
+{% block content %}
+<main class="container-fluid">
+    <br>
+
+  <!-- header info -->
+<div class="row mb-4">
+  <div class="col-md-4">
+    <strong>Client Details</strong><br>
+    <strong>Client:</strong> {{ quotation.client.legal_name }}<br>
+    <strong>Address:</strong> {{ quotation.client.address }}<br>
+
+    <strong>Notify:</strong>
+    {% if quotation.notify_contacts.exists %}
+      {% for c in quotation.notify_contacts.all %}
+        {{ c.name }} &lt;{{ c.email }}&gt;{% if not forloop.last %},<br> {% endif %}
+      {% endfor %}
+    {% else %}
+      <span class="text-muted">—</span>
+    {% endif %}
+    <br>
+
+    <strong>Phone:</strong> {{ quotation.client.phone }}
+  </div>
+  <div class="col-md-4 text-md">
+    <strong>Quotation Details</strong><br>
+    <strong>Quotation #:</strong> {{ quotation.number }}<br>
+    <strong>Issued:</strong> {{ quotation.date_issued|date:"Y-m-d" }}<br>
+    <strong>Valid Until:</strong> {{ quotation.valid_until|date:"Y-m-d" }}<br>
+    <strong>Currency:</strong> {{ quotation.coin }}
+  </div>
+  <div class="col-md-4 text-md-center">
+    <strong>Commercial Conditions &amp; Warranty</strong><br>
+    <small class="text-muted">Scan for full terms:</small><br>
+    <img src="{% static 'billing/img/qr_code.png' %}"
+         alt="QR Code for Commercial Terms"
+         style="max-width:120px; height:auto;">
+  </div>
+</div>
+
+
+
+  <!-- 1. Summary -->
+  <div class="card">
+    <div class="card-header"><strong>1. Summary</strong></div>
+    <div class="card-body p-0">
+      <table class="table mb-0 summary-table">
+        <thead>
+          <tr>
+            <th class="text-start">Description</th>
+            <th class="text-end">Materials</th>
+            <th class="text-end">Labor</th>
+            <th class="text-end">Equipment</th>
+            <th class="text-end">Extras</th>
+            <th class="text-end">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Totals</td>
+            <td class="text-end">{{ sum_material|floatformat:"-0"|intcomma }}</td>
+            <td class="text-end">{{ sum_labor   |floatformat:"-0"|intcomma }}</td>
+            <td class="text-end">{{ sum_equip   |floatformat:"-0"|intcomma }}</td>
+            <td class="text-end">{{ sum_extra   |floatformat:"-0"|intcomma }}</td>
+            <td class="text-end" style="font-size:1.5rem" >{{ grand_total|floatformat:"-0"|intcomma }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="form-check form-switch no-print mb-4">
+    <input class="form-check-input page-break-checkbox" type="checkbox" id="break-summary">
+    <label class="form-check-label" for="break-summary">Page break here</label>
+  </div>
+
+  <!-- 2. Payment Milestones -->
+  <div class="card">
+    <div class="card-header d-flex justify-content-between">
+      <strong>2. Payment Milestones</strong>
+      <button id="add-milestone" class="btn btn-sm btn-outline-primary no-print">Add Row</button>
+    </div>
+    <div class="card-body p-0 table-responsive">
+      <table class="table mb-0 terms-table">
+        <thead class="table-light">
+          <tr>
+            <th>Milestone</th>
+            <th class="text-end">%</th>
+            <th class="text-end">Amount ({{ quotation.coin }})</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="milestones-body">
+          <tr class="milestone-row">
+            <td><input type="text" class="form-control form-control-sm milestone-desc" value="Deposit"></td>
+            <td><input type="number" class="form-control form-control-sm milestone-pct" value="30" min="0" max="100"></td>
+            <td class="text-end milestone-amt">0</td>
+            <td class="text-center"><span class="remove-milestone">&times;</span></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td class="text-end fw-bold">Total:</td>
+            <td id="total-pct" class="text-end fw-bold">0%</td>
+            <td id="total-amt" class="text-end fw-bold">0</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+  <div class="form-check form-switch no-print mb-4">
+    <input class="form-check-input page-break-checkbox" type="checkbox" id="break-milestones">
+    <label class="form-check-label" for="break-milestones">Page break here</label>
+  </div>
+
+  <!-- 3. Project Timeline (Gantt) -->
+  <div class="card">
+    <div class="card-header d-flex justify-content-between">
+      <strong>3. Project Timeline (Gantt Chart)</strong>
+      <button id="add-gantt" class="btn btn-sm btn-outline-primary no-print">Add Task</button>
+    </div>
+    <div class="card-body p-0 table-responsive">
+      <table class="table mb-0 terms-table">
+        <thead class="table-light">
+          <tr>
+            <th>Task</th>
+            <th class="text-center">Start Date</th>
+            <th class="text-center">End Date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="gantt-body">
+          <tr class="gantt-row">
+            <td><input type="text" class="form-control form-control-sm gantt-task" placeholder="Task name"></td>
+            <td class="text-center"><input type="date" class="form-control form-control-sm gantt-start"></td>
+            <td class="text-center"><input type="date" class="form-control form-control-sm gantt-end"></td>
+            <td class="text-center"><span class="remove-gantt text-danger">&times;</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="form-check form-switch no-print mb-4">
+    <input class="form-check-input page-break-checkbox" type="checkbox" id="break-gantt">
+    <label class="form-check-label" for="break-gantt">Page break here</label>
+  </div>
+
+  <!-- forced break before details -->
+  <div class="page-break"><br><br><br><br></div>
+
+  <!-- 4. Labor -->
+  <div class="card">
+    <div class="card-header"><strong>4. Labor</strong></div>
+    <div class="card-body p-0 table-responsive">
+      <table class="table mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Item</th>
+            <th class="text-end">Qty</th>
+            <th class="text-end">Days</th>
+            <th class="text-end">Unit Price</th>
+            <th class="text-end">Total Price</th>
+            <th class="text-end">Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for it in labor_items %}
+          <tr>
+            <td>{{ it.description }}</td>
+            <td class="text-end">{{ it.qty|floatformat:"-0"|intcomma }}</td>
+            <td class="text-end">{{ it.days|floatformat:"-0"|intcomma }}</td>
+            <td class="text-end">{{ it.unit_price|floatformat:"-0"|intcomma }}</td>
+            <td class="text-end">{{ it.total_price|floatformat:"-0"|intcomma }}</td>
+            <td>{{ it.remarks }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="text-center text-muted">No labor items.</td></tr>
+          {% endfor %}
+        </tbody>
+            <tfoot class="table-light">
+            <tr>
+              <td colspan="4" class="text-end fw-bold">Total Labor:</td>
+              <td class="text-end fw-bold">{{ sum_labor|floatformat:"-0"|intcomma }}</td>
+              <td></td>
+            </tr>
+          </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div class="form-check form-switch no-print mb-4">
+    <input class="form-check-input page-break-checkbox" type="checkbox" id="break-summary">
+    <label class="form-check-label" for="break-summary">Page break here</label>
+  </div>
+
+  <!-- 5. Materials -->
+  <div class="card">
+    <div class="card-header"><strong>5. Materials</strong></div>
+    <div class="card-body p-0 table-responsive">
+      <table class="table mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Spec</th>
+            <th class="text-end">Qty</th>
+            <th class="text-end">Unit</th>
+            <th class="text-end">Unit Cost</th>
+            <th class="text-end">Total</th>
+            <th class="text-end">Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for it in material_items %}
+          <tr>
+            <td>{{ it.description }}</td>
+            <td class="text-end">{{ it.qty|floatformat:"-0"|intcomma }}</td>
+            <td class="text-end" contenteditable>Lot</td>
+            <td class="text-end">{{ it.unit_price|floatformat:"-0"|intcomma }}</td>
+            <td class="text-end">{{ it.total_price|floatformat:"-0"|intcomma }}</td>
+            <td>{{ it.remarks }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" class="text-center text-muted">No material items.</td></tr>
+          {% endfor %}
+        </tbody>
+        <tfoot class="table-light">
+          <tr>
+            <td colspan="4" class="text-end fw-bold">Total Materials:</td>
+            <td class="text-end fw-bold">{{ sum_material|floatformat:"-0"|intcomma }}</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+        
+        
+    </div>
+  </div>
+
+  <div class="form-check form-switch no-print mb-4">
+    <input class="form-check-input page-break-checkbox" type="checkbox" id="break-summary">
+    <label class="form-check-label" for="break-summary">Page break here</label>
+  </div>
+
+  <!-- 6. Equipment -->
+  <div class="card">
+    <div class="card-header"><strong>6. Equipment</strong></div>
+    <div class="card-body p-0 table-responsive">
+      <table class="table mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Description</th>
+            <th class="text-end">Qty</th>
+            <th class="text-end">Days</th>
+            <th class="text-end">Unit Price</th>
+            <th class="text-end">Total Price</th>
+            <th class="text-end">Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for it in equipment_items %}
+          <tr>
+            <td>{{ it.description }}</td>
+            <td class="text-end">{{ it.qty|floatformat:"-0"|intcomma }}</td>
+            <td class="text-end">{{ it.days|floatformat:"-0"|intcomma }}</td>
+            <td class="text-end">{{ it.unit_price|floatformat:"-0"|intcomma }}</td>
+            <td class="text-end">{{ it.total_price|floatformat:"-0"|intcomma }}</td>
+            <td>{{ it.remarks }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="text-center text-muted">No equipment items.</td></tr>
+          {% endfor %}
+        </tbody>
+        <tfoot class="table-light">
+          <tr>
+            <td colspan="4" class="text-end fw-bold">Total Equipment:</td>
+            <td class="text-end fw-bold">{{ sum_equip|floatformat:"-0"|intcomma }}</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+
+    </div>
+  </div>
+
+  <div class="form-check form-switch no-print mb-4">
+    <input class="form-check-input page-break-checkbox" type="checkbox" id="break-summary">
+    <label class="form-check-label" for="break-summary">Page break here</label>
+  </div>
+
+  <!-- 7. Overhead -->
+  <div class="card">
+    <div class="card-header d-flex justify-content-between">
+      <strong>7. Overhead</strong>
+      <button class="btn btn-sm btn-outline-primary no-print">Add Overhead</button>
+    </div>
+    <div class="card-body p-0 table-responsive">
+      <table class="table mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Description</th>
+            <th class="text-end">Amount</th>
+          </tr>
+        </thead>
+        <tbody id="overhead-body">
+          {% for it in overhead_items %}
+          <tr class="overhead-row">
+            <td>{{ it.description }}</td>
+            <td class="text-end">{{ it.total_price|floatformat:"-0"|intcomma }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="2" class="text-center text-muted">No overhead items.</td></tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td class="text-end fw-bold">Total Overhead:</td>
+            <td id="overhead-total" class="text-end fw-bold">{{ sum_extra|floatformat:"-0"|intcomma }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="form-check form-switch no-print mb-4">
+    <input class="form-check-input page-break-checkbox" type="checkbox" id="break-summary">
+    <label class="form-check-label" for="break-summary">Page break here</label>
+  </div>
+
+<!-- … earlier sections … -->
+
+<!-- 8. Project Drawings -->
+<div class="card mb-4">
+  <div class="card-header"><strong>8. Project Drawings</strong></div>
+  <div class="card-body">
+    {% if drawings %}
+      <div class="row g-3">
+        {% for d in drawings %}
+          <div class="col-sm-6 col-md-4">
+            <div class="card h-100">
+              {% with d.file.name|lower as fname %}
+                {% if ".jpg" in fname or ".jpeg" in fname or ".png" in fname or ".gif" in fname or ".bmp" in fname or ".webp" in fname %}
+                  <img src="{{ d.file.url }}"
+                       class="card-img-top"
+                       style="object-fit:cover; height:150px;"
+                       alt="{{ d.description|default:'Drawing' }}">
+                {% else %}
+                  <div class="card-img-top d-flex align-items-center justify-content-center"
+                       style="height:150px; background-color:#f8f9fa;">
+                    <small class="text-muted">No preview available</small>
+                  </div>
+                {% endif %}
+              {% endwith %}
+              <div class="card-body p-2">
+                <h6 class="card-title">{{ d.description|default:"Drawing" }}</h6>
+                <a href="{{ d.file.url }}"
+                   download
+                   class="btn btn-sm btn-outline-primary">
+                  Download
+                </a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-muted mb-0">No drawings attached.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="form-check form-switch no-print mb-4">
+  <input class="form-check-input page-break-checkbox" type="checkbox" id="break-summary">
+  <label class="form-check-label" for="break-summary">Page break here</label>
+</div>
+
+
+<!-- 9. Payment Procedures -->
+<div class="card mb-4">
+  <div class="card-header"><strong>9. Payment Procedures</strong></div>
+  <div class="card-body">
+    <p class="mb-3">
+      <a href="{% static 'billing/pdf/Payment Procedures.pdf' %}"
+         class="btn btn-sm btn-outline-secondary" download>
+        Download full payment procedures (PDF)
+      </a>
+    </p>
+
+    <div class="row">
+      <!-- USD SPID -->
+      <div class="col-md-6">
+        <p class="fw-semibold mb-2">
+          USD SPID Deposit Instructions<br>
+          USD 입금 (SPID)
+        </p>
+        <table class="table table-bordered mb-0">
+          <tbody>
+            <tr>
+              <th class="align-middle">Bank<br>은행명</th>
+              <td>Banco Monex S.A. (“BMONEX / BANCO MONEX”)</td>
+            </tr>
+            <tr>
+              <th class="align-middle">SPID CLABE<br>SPID CLABE</th>
+              <td>112962000030697626</td>
+            </tr>
+            <tr>
+              <th class="align-middle">Contract / Reference<br>계약 / 참조 번호</th>
+              <td>3069762</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- MXN SPEI -->
+      <div class="col-md-6">
+        <p class="fw-semibold mb-2">
+          MXN SPEI Deposit Instructions<br>
+          MXN 입금 (SPEI)
+        </p>
+        <table class="table table-bordered mb-0">
+          <tbody>
+            <tr>
+              <th class="align-middle">Bank<br>은행명</th>
+              <td>Banco Monex S.A. (“BMONEX / BANCO MONEX”)</td>
+            </tr>
+            <tr>
+              <th class="align-middle">SPEI CLABE<br>SPEI CLABE</th>
+              <td>112180000030697628</td>
+            </tr>
+            <tr>
+              <th class="align-middle">Contract / Reference<br>계약 / 참조 번호</th>
+              <td>3069762</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  /* Milestones */
+  (function(){
+    const grandTotal = {{ grand_total|floatformat:"-0" }};
+    const body       = document.getElementById('milestones-body');
+    const totalPctEl = document.getElementById('total-pct');
+    const totalAmtEl = document.getElementById('total-amt');
+    const addBtn     = document.getElementById('add-milestone');
+
+    function recalc() {
+      let totalPct = 0, totalAmt = 0;
+      body.querySelectorAll('.milestone-row').forEach(row => {
+        let pct = parseFloat(row.querySelector('.milestone-pct').value) || 0;
+        let amt = Math.round(grandTotal * pct/100);
+        row.querySelector('.milestone-amt').textContent = amt.toLocaleString();
+        totalPct += pct; totalAmt += amt;
+      });
+      totalPctEl.textContent = totalPct.toFixed(0)+'%';
+      totalAmtEl.textContent = totalAmt.toLocaleString();
+    }
+    function addRow() {
+      const tr = document.createElement('tr');
+      tr.className = 'milestone-row';
+      tr.innerHTML = `
+        <td><input type="text" class="form-control form-control-sm milestone-desc" placeholder="Milestone"></td>
+        <td><input type="number" class="form-control form-control-sm milestone-pct" value="0"></td>
+        <td class="text-end milestone-amt">0</td>
+        <td class="text-center"><span class="remove-milestone">&times;</span></td>
+      `;
+      body.appendChild(tr);
+      tr.querySelector('.milestone-pct').addEventListener('input', recalc);
+      tr.querySelector('.remove-milestone').addEventListener('click', ()=>{ tr.remove(); recalc(); });
+      recalc();
+    }
+    body.querySelectorAll('.milestone-pct').forEach(el=>el.addEventListener('input', recalc));
+    body.querySelectorAll('.remove-milestone').forEach(el=>
+      el.addEventListener('click', ()=>{el.closest('tr').remove(); recalc();})
+    );
+    addBtn.addEventListener('click', addRow);
+    recalc();
+  })();
+
+  /* Gantt */
+  (function(){
+    const ganttBody = document.getElementById('gantt-body');
+    document.getElementById('add-gantt').addEventListener('click', ()=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="text" class="form-control form-control-sm gantt-task" placeholder="Task"></td>
+        <td><input type="date" class="form-control form-control-sm gantt-start"></td>
+        <td><input type="date" class="form-control form-control-sm gantt-end"></td>
+        <td><span class="remove-gantt text-danger">&times;</span></td>
+      `;
+      ganttBody.appendChild(tr);
+      tr.querySelector('.remove-gantt').addEventListener('click', ()=>tr.remove());
+    });
+    ganttBody.querySelectorAll('.remove-gantt')
+      .forEach(el=>el.addEventListener('click', ()=>el.closest('tr').remove()));
+  })();
+
+/* Break toggles */
+document.querySelectorAll('.page-break-checkbox').forEach(cb=>{
+  cb.addEventListener('change', e=>{
+    const container = e.target.closest('div');
+    if (e.target.checked) {
+      const brDiv = document.createElement('div');
+      brDiv.className = 'page-break';
+      // insert three <br> so you jump past the fixed header
+      brDiv.innerHTML = '<br><br><br><br>';
+      container.after(brDiv);
+    } else {
+      const next = container.nextElementSibling;
+      if (next && next.classList.contains('page-break')) {
+        next.remove();
+      }
+    }
+  });
+});
+
+</script>
+{% endblock %}

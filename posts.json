@@ -1,0 +1,22 @@
+[
+    {"title": "Safety Inspection Report", "content": "The weekly safety inspection report is attached for review.", "user_id": 1, "visibility": 4},
+    {"title": "Equipment Maintenance Schedule", "content": "Please find the updated equipment maintenance schedule attached.", "user_id": 2, "visibility": 4},
+    {"title": "New Project Kickoff", "content": "Attached are the details for the new project kickoff meeting.", "user_id": 3, "visibility": 4},
+    {"title": "Daily Progress Report", "content": "Today's progress report is attached.", "user_id": 4, "visibility": 4},
+    {"title": "Site Safety Meeting", "content": "Minutes from today's site safety meeting are attached.", "user_id": 1, "visibility": 4},
+    {"title": "Material Delivery Schedule", "content": "The attached file includes the updated material delivery schedule.", "user_id": 6, "visibility": 4},
+    {"title": "Worker Attendance Record", "content": "Attached is the worker attendance record for this week.", "user_id": 7, "visibility": 4},
+    {"title": "Project Budget Update", "content": "Please review the attached project budget update.", "user_id": 8, "visibility": 4},
+    {"title": "Quality Control Checklist", "content": "The attached document includes the latest quality control checklist.", "user_id": 9, "visibility": 4},
+    {"title": "Client Meeting Notes", "content": "Notes from the recent client meeting are attached.", "user_id": 10, "visibility": 4},
+    {"title": "Weekly Work Plan", "content": "The weekly work plan is attached for your reference.", "user_id": 11, "visibility": 4},
+    {"title": "Permit Applications", "content": "Attached are the permit applications for the upcoming projects.", "user_id": 12, "visibility": 4},
+    {"title": "Incident Report", "content": "An incident report from today is attached.", "user_id": 13, "visibility": 4},
+    {"title": "Subcontractor Agreements", "content": "Please find the subcontractor agreements attached.", "user_id": 14, "visibility": 4},
+    {"title": "Employee Training Records", "content": "Attached are the updated employee training records.", "user_id": 1, "visibility": 4},
+    {"title": "Worksite Photos", "content": "Attached are the latest worksite photos for documentation.", "user_id": 2, "visibility": 4},
+    {"title": "Project Timeline Update", "content": "The updated project timeline is attached.", "user_id": 3, "visibility": 4},
+    {"title": "Resource Allocation Plan", "content": "Attached is the resource allocation plan for next month.", "user_id": 18, "visibility": 4},
+    {"title": "Vendor Contracts", "content": "The latest vendor contracts are attached for review.", "user_id": 1, "visibility": 4},
+    {"title": "Environmental Impact Assessment", "content": "The attached document includes the environmental impact assessment.", "user_id": 1, "visibility": 4}
+]

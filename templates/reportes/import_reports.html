@@ -1,0 +1,136 @@
+{% extends "reportes/base.html" %}
+{% load static %}
+{% block title %}Import Daily Reports{% endblock %}
+
+{% block content %}
+<main class="container py-4">
+  <h1>Import Daily Reports</h1>
+
+  {% if messages %}
+    {% for m in messages %}
+      <div class="alert alert-{{ m.tags }}">{{ m }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- 1) Import Form -->
+  <form method="post" enctype="multipart/form-data" class="mb-5">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="id_files" class="form-label">
+        Select <code>.xlsx</code> file(s) or a <code>.zip</code> of them
+      </label>
+      <input
+        type="file"
+        name="files"
+        id="id_files"
+        multiple
+        class="form-control"
+        accept=".xlsx,.zip">
+    </div>
+    <button type="submit" class="btn btn-primary">
+      <i class="bi bi-upload"></i> Upload &amp; Import
+    </button>
+  </form>
+
+  <!-- 2) Rollback Section -->
+  <h2>Rollback Backups</h2>
+  <form method="post" id="rollback-form">
+    {% csrf_token %}
+    <div class="row g-3 align-items-end mb-3">
+      <div class="col-md-6">
+        <label for="id_project" class="form-label">Select Project</label>
+        <select
+          name="project_id"
+          id="id_project"
+          class="form-select"
+          required>
+          <option value="">— choose one —</option>
+          {% for proj in projects %}
+            <option value="{{ proj.id }}">{{ proj.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6 text-end">
+        <button
+          type="submit"
+          class="btn btn-warning"
+          id="rollback-button"
+          disabled>
+          <i class="bi bi-arrow-counterclockwise"></i>
+          Rollback Selected Backup
+        </button>
+      </div>
+    </div>
+
+    <!-- Backups table: shown only when exactly one project is selected -->
+    <div id="backups-section" class="table-responsive" style="display:none;">
+      <table class="table table-striped align-middle">
+        <thead class="table-light">
+          <tr>
+            <th style="width:1%"></th>
+            <th>Filename</th>
+            <th>Created On</th>
+          </tr>
+        </thead>
+        <tbody id="backups-body">
+          {# filled by JS #}
+        </tbody>
+      </table>
+    </div>
+  </form>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// backups_map is provided by the view as JSON
+const backupsMap = {{ backups_json|safe }};
+
+const projectSelect   = document.getElementById('id_project');
+const backupsSection  = document.getElementById('backups-section');
+const backupsBody     = document.getElementById('backups-body');
+const rollbackButton  = document.getElementById('rollback-button');
+
+projectSelect.addEventListener('change', () => {
+  const pid = projectSelect.value;
+  backupsBody.innerHTML = '';
+  rollbackButton.disabled = true;
+
+  // Only show if exactly one project selected (i.e. dropdown has value)
+  if (pid && backupsMap[pid] && backupsMap[pid].length) {
+    backupsSection.style.display = 'block';
+
+    backupsMap[pid].forEach(backup => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <input type="radio" name="backup" value="${backup.filename}">
+        </td>
+        <td>${backup.filename}</td>
+        <td>${backup.created}</td>
+      `;
+      backupsBody.appendChild(tr);
+    });
+
+    // enable button when a radio is checked
+    backupsBody.querySelectorAll('input[name="backup"]')
+      .forEach(radio =>
+        radio.addEventListener('change', () => {
+          rollbackButton.disabled = !radio.checked;
+        })
+      );
+
+  } else {
+    backupsSection.style.display = 'none';
+  }
+});
+
+// confirm before rollback
+document.getElementById('rollback-form')
+  .addEventListener('submit', e => {
+    if (!confirm('This will restore the selected backup, overwriting current data.\nProceed?')) {
+      e.preventDefault();
+    }
+  });
+</script>
+{% endblock %}

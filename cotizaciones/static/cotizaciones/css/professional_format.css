@@ -1,0 +1,133 @@
+/* Print & Page Configuration */
+@page {
+    size: A4 landscape;
+    margin: 1cm;
+  }
+  
+  /* Base Body Style */
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Manual control variables – override per section if needed */
+  :root {
+    --font-base: 1.1rem;
+    --font-header: 2rem;
+    --font-subheader: 1rem;
+    --font-table: 0.712rem;
+    --font-footer: 0.6rem;
+    --logo-height: 40px;
+    --img-max-width: 100%;
+  }
+  
+  /* Header and Footer */
+  .header,
+  .footer {
+    width: 100%;
+    text-align: center;
+    padding: 0.4cm 0;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #0d3b66;
+    margin-bottom: 0.5cm;
+  }
+  
+  .header img {
+    height: var(--logo-height);
+  }
+  
+  .header-title {
+    flex-grow: 1;
+    text-align: center;
+  }
+  
+  .header-title h5 {
+    margin: 0;
+    font-size: var(--font-header);
+    color: #0d3b66;
+  }
+  
+  .header-title small {
+    font-size: var(--font-subheader);
+    color: #333;
+  }
+  
+  .footer {
+    font-size: var(--font-footer);
+    color: #666;
+    border-top: 1px solid #ddd;
+    margin-top: 1cm;
+  }
+  
+  /* Sections */
+  .section-title {
+    font-weight: 600;
+    color: #0d3b66;
+    border-left: 5px solid #0d3b66;
+    padding-left: 10px;
+    margin-top: 0.4in;
+    font-size: var(--font-subheader);
+  }
+  
+  .project-info {
+    font-size: var(--font-base);
+    margin-bottom: 1rem;
+  }
+  
+  /* Tables */
+  .table {
+    font-size: var(--font-table);
+    width: 100%;
+  }
+  
+  .table th,
+  .table td {
+    padding: 2px;
+    vertical-align: middle;
+    text-align: center;
+  }
+  
+  a.drawing-link {
+    font-size: var(--font-table);
+    text-decoration: none;
+    color: #0d6efd;
+  }
+  
+  /* Images */
+  img {
+    max-width: var(--img-max-width);
+    height: auto;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Print Rules */
+  @media print {
+    .header,
+    .footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      background: #fff;
+    }
+  
+    .header {
+      top: 0;
+    }
+  
+    .footer {
+      bottom: 0;
+    }
+  
+    body {
+      margin-top: 2.5cm;
+      margin-bottom: 2.5cm;
+    }
+  }
+  

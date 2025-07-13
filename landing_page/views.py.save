@@ -1,0 +1,121 @@
+from django.forms.models import BaseModelForm
+from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin , UserPassesTestMixin
+from django.http import HttpResponse
+from django.shortcuts import render , get_object_or_404
+from django.views.generic import (
+    ListView , 
+    DetailView , 
+    CreateView ,
+    UpdateView ,
+    DeleteView
+)
+from .models import Post
+
+from django.contrib.auth.models import User
+
+from django.http import HttpResponseForbidden
+
+
+
+data = {
+    'posts' : Post.objects.all(),
+    'banner' : False
+}
+
+
+
+def privacy_policy(request):
+    return render(request,'landing/EN/privacy_policy.html',data)
+
+def home(request):
+    return render(request,'landing/EN/home.html',data)
+
+def about(request):
+    return render(request,'landing/EN/about.html')
+
+@login_required
+def blog(request):
+    context = {
+        'posts':Post.objects.all()
+    }
+    
+    return render(request,'landing/EN/blank.html',data)
+
+
+class PostListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Post
+    template_name = 'landing/EN/blank.html'
+    context_object_name = 'posts'
+    ordering = ['-date_posted']
+    paginate_by = 10
+
+    def test_func(self):
+        # Check if the user is staff
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        # Optionally handle unauthorized access in a specific way, like returning a custom response
+        if not self.request.user.is_authenticated:
+            return super().handle_no_permission()
+        else:
+            return HttpResponseForbidden('You do not have permission to view this page.<br> <a href="/">Return Home</a>')
+
+
+class UserPostListView(LoginRequiredMixin, UserPassesTestMixin , ListView):
+    model = Post
+    template_name = 'landing/EN/user_posts.html'
+    context_object_name = 'posts'
+
+    paginate_by = 10
+
+    def get_queryset(self):
+        user = get_object_or_404(User, username = self.kwargs.get('username'))
+        
+        return Post.objects.filter(author = user).order_by('-date_posted')
+    
+    def test_func(self):
+        return self.request.user.is_staff
+
+class PostDetailView(LoginRequiredMixin , DetailView):
+    model = Post
+    template_name = 'landing/EN/post_detail.html'
+    
+class PostCreateView(LoginRequiredMixin , CreateView ):
+    model = Post
+    fields = ['title','content','attached']
+    template_name = 'landing/EN/post_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    
+class PostUpdateView(LoginRequiredMixin ,UserPassesTestMixin, UpdateView ):
+    model = Post
+    fields = ['title','content','attached']
+    template_name = 'landing/EN/post_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
+
+    
+class PostDeleteView(LoginRequiredMixin ,UserPassesTestMixin, DeleteView):
+    model = Post
+    template_name = 'landing/EN/post_confirm_delete.html'
+    success_url = reverse_lazy('blog')
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
+
+

@@ -1,0 +1,189 @@
+{# templates/reportes/project_form.html #}
+{% extends "reportes/base.html" %}
+{% load static %}
+
+{% block title %}
+  {% if form.instance.pk %}Edit{% else %}Add{% endif %} Project
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">{% if form.instance.pk %}Edit{% else %}Add{% endif %} Project</h2>
+
+  <form method="post" enctype="multipart/form-data"
+        class="needs-validation" novalidate>
+    {% csrf_token %}
+
+    <!-- Project fields -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-6 form-floating">
+        {{ form.name }}<label for="{{ form.name.id_for_label }}">Name*</label>
+        {% for e in form.name.errors %}
+          <div class="invalid-feedback d-block">{{ e }}</div>
+        {% endfor %}
+      </div>
+      <div class="col-md-6 form-floating">
+        {{ form.client }}<label for="{{ form.client.id_for_label }}">Client*</label>
+        {% for e in form.client.errors %}
+          <div class="invalid-feedback d-block">{{ e }}</div>
+        {% endfor %}
+      </div>
+      <div class="col-md-6 form-floating">
+        {{ form.notify_contacts }}
+        <label for="id_notify_contacts">Notify Contacts</label>
+        {% for e in form.notify_contacts.errors %}
+          <div class="invalid-feedback d-block">{{ e }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="col-md-4 form-floating">
+        {{ form.location_city }}<label for="{{ form.location_city.id_for_label }}">City</label>
+      </div>
+      <div class="col-md-4 form-floating">
+        {{ form.start_date }}<label for="{{ form.start_date.id_for_label }}">Start Date</label>
+      </div>
+      <div class="col-md-4 form-floating">
+        {{ form.end_date }}<label for="{{ form.end_date.id_for_label }}">End Date</label>
+      </div>
+      <div class="col-md-6 form-floating">
+        {{ form.contract_number }}<label for="{{ form.contract_number.id_for_label }}">Contract #</label>
+      </div>
+    </div>
+
+    <hr>
+    <h5>Drawings</h5>
+    {{ drawings.management_form }}
+    <div id="drawings-container">
+      {% for sub in drawings %}
+        <div class="card mb-3">
+          <div class="card-body">
+            {# id + DELETE hidden fields #}
+            {% for hidden in sub.hidden_fields %}
+              {{ hidden }}
+            {% endfor %}
+            <div class="row g-3">
+              <div class="col-md-5 form-floating">
+                {{ sub.file }}<label for="{{ sub.file.id_for_label }}">
+                  File{% if not sub.instance.pk %}*{% endif %}
+                </label>
+                {% for e in sub.file.errors %}
+                  <div class="invalid-feedback d-block">{{ e }}</div>
+                {% endfor %}
+              </div>
+              <div class="col-md-5 form-floating">
+                {{ sub.description }}<label for="{{ sub.description.id_for_label }}">Description</label>
+                {% for e in sub.description.errors %}
+                  <div class="invalid-feedback d-block">{{ e }}</div>
+                {% endfor %}
+              </div>
+              {% if sub.instance.pk %}
+                <div class="col-md-2 form-check mt-4">
+                  {{ sub.DELETE }}
+                  <label class="form-check-label" for="{{ sub.DELETE.id_for_label }}">
+                    Delete
+                  </label>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <button type="button" class="btn btn-outline-primary mb-4"
+            id="add-drawing">
+      + Add Drawing
+    </button>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button type="submit" class="btn btn-success">
+        {% if form.instance.pk %}Save Changes{% else %}Create Project{% endif %}
+      </button>
+      <a href="{% url 'reportes:project_list' %}" class="btn btn-secondary">
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>
+
+{# Here we stash the “empty” drawing subform for JS to clone #}
+<script id="empty-drawing-template" type="text/template">
+  {% with sub=drawings.empty_form %}
+  <div class="card mb-3">
+    <div class="card-body">
+      {% for hidden in sub.hidden_fields %}{{ hidden }}{% endfor %}
+      <div class="row g-3">
+        <div class="col-md-5 form-floating">
+          {{ sub.file }}<label for="{{ sub.file.id_for_label }}">File*</label>
+        </div>
+        <div class="col-md-5 form-floating">
+          {{ sub.description }}<label for="{{ sub.description.id_for_label }}">Description</label>
+        </div>
+        <div class="col-md-2 form-check mt-4">
+          {{ sub.DELETE }}
+          <label class="form-check-label" for="{{ sub.DELETE.id_for_label }}">
+            Delete
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endwith %}
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 1) Bootstrap validation
+(() => {
+  'use strict';
+  const forms = document.querySelectorAll('.needs-validation');
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', e => {
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    }, false);
+  });
+})();
+
+// 2) Dynamic “Add Drawing”
+const container  = document.getElementById('drawings-container');
+const totalForms = document.querySelector('input[name="drawings-TOTAL_FORMS"]');
+const template   = document.getElementById('empty-drawing-template').innerHTML;
+
+document.getElementById('add-drawing').addEventListener('click', () => {
+  const i = parseInt(totalForms.value, 10);
+  // replace __prefix__ with the new index
+  const html = template.replace(/__prefix__/g, i);
+  container.insertAdjacentHTML('beforeend', html);
+  totalForms.value = i + 1;
+});
+
+function loadContacts(){
+  var url      = "{% url 'reportes:client_contacts_json' %}",
+      data     = { client: $('#id_client').val() },
+      $contacts = $('#id_notify_contacts');
+
+  $contacts.empty();
+  $.getJSON(url, data, function(list){
+    list.forEach(function(c){
+      $('<option>').val(c.id)
+                   .text(c.name+' <'+c.email+'>')
+                   .appendTo($contacts);
+    });
+  });
+}
+
+$('#id_client').change(function(){
+  loadContacts();
+  // … any existing loadProjects() calls …
+});
+
+// on page load, if editing:
+$(document).ready(loadContacts);
+
+</script>
+{% endblock %}

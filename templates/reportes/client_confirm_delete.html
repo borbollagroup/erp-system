@@ -1,0 +1,9 @@
+{% extends "reportes/base.html" %}
+{% block title %}Delete Client{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2>Delete Client</h2>
+  <p>Are you sure you want to delete "{{ object }}" and all its contacts?</p>
+  <form method="post">{% csrf_token %}<button type="submit" class="btn btn-danger">Confirm Delete</button><a href="{% url 'reportes:client_list' %}" class="btn btn-outline-secondary ms-2">Cancel</a></form>
+</div>
+{% endblock %}

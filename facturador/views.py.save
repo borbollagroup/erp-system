@@ -1,0 +1,315 @@
+import requests
+from django.contrib.auth.decorators import user_passes_test
+from .forms import OrganizationForm
+from django.http import HttpResponse, Http404
+from django.conf import settings
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Organization
+
+from django.http import JsonResponse
+
+
+
+FACTURAPI_ORGANIZATION_KEY = 'sk_user_eQ8Ybm1yRjVnKvP35g8RbNQJn3ZJagw4kOzAdXMpD6'
+FACTURAPI_KEY = 'sk_live_19Vbx6WJm5P4j8OEoEP1kAjn8KqeBARXQgY3ZlwLMy'
+
+# Decorator to restrict views to superusers only
+superuser_required = user_passes_test(lambda u: u.is_superuser)
+
+def api_keys(request, organization_id):
+    # Fetch the organization using the organization_id instead of id
+    organizacion = get_object_or_404(Organization, organization_id=organization_id)
+    
+    # Context for the template
+    context = {
+        'organizacion': organizacion,
+        # Add any other necessary context
+    }
+    
+    return render(request, 'facturador/organizaciones/api_keys.html', context)
+
+@superuser_required
+def listar_organizaciones(request):
+    headers = {
+        'Authorization': f'Bearer {FACTURAPI_ORGANIZATION_KEY}',
+    }
+    response = requests.get('https://www.facturapi.io/v2/organizations', headers=headers)
+    
+    try:
+        organizaciones = response.json().get('data', [])
+    except ValueError:
+        organizaciones = []
+    
+    return render(request, 'facturador/organizaciones/listar_organizaciones.html', {'organizaciones': organizaciones})
+
+@superuser_required
+def crear_organizacion(request):
+    if request.method == 'POST':
+        form = OrganizationForm(request.POST, request.FILES)
+        if form.is_valid():
+            data = form.cleaned_data
+            payload = {
+                "legal": {
+                    "name": data['nombre'],
+                    "legal_name": data['nombre'],
+                    "tax_system": data['nombre'],
+                    "website": data['sitio_web'],
+                    "phone": data['telefono'],
+                    "address": {
+                        "street": data['direccion'],
+                        "exterior": data['direccion'],
+                        "interior": data['direccion'],
+                        "neighborhood": data['direccion'],
+                        "city": data['ciudad'],
+                        "municipality": data['ciudad'],
+                        "zip": data['codigo_postal'],
+                        "state": data['estado'],
+                    }
+                },
+                "customization": {
+                    "has_logo": data['logo'],
+                    "color": data['color'],
+                    "next_folio_number": data['next_folio_number'],
+                    "next_folio_number_test": data['next_folio_number_test'],
+                }
+            }
+            headers = {
+                'Authorization': f'Bearer {FACTURAPI_ORGANIZATION_KEY}',
+            }
+            response = requests.post('https://www.facturapi.io/v2/organizations', headers=headers, json=payload)
+            org_id = response.json()['id']
+
+            if data['cer_file'] and data['key_file'] and data['csd_password']:
+                files = {
+                    'cer': data['cer_file'],
+                    'key': data['key_file'],
+                    'password': (None, data['csd_password']),
+                }
+                requests.put(f'https://www.facturapi.io/v2/organizations/{org_id}/certificate', headers=headers, files=files)
+
+            if data['logo_file']:
+                logo_files = {
+                    'file': data['logo_file'],
+                }
+                requests.put(f'https://www.facturapi.io/v2/organizations/{org_id}/logo', headers=headers, files=logo_files)
+
+            return redirect('listar_organizaciones')
+    else:
+        form = OrganizationForm()
+
+    return render(request, 'facturador/organizaciones/crear_organizacion.html', {'form': form})
+
+@superuser_required
+def editar_organizacion(request, organizacion_id):
+    headers = {
+        'Authorization': f'Bearer {FACTURAPI_ORGANIZATION_KEY}',
+    }
+    response = requests.get(f'https://www.facturapi.io/v2/organizations/{organizacion_id}', headers=headers)
+    organizacion = response.json()
+
+    if request.method == 'POST':
+        form = OrganizationForm(request.POST, request.FILES)
+        if form.is_valid():
+            data = form.cleaned_data
+            payload = {
+                "legal": {
+                    "name": data['nombre'],
+                    "legal_name": data['nombre'],
+                    "tax_system": data['nombre'],
+                    "website": data['sitio_web'],
+                    "phone": data['telefono'],
+                    "address": {
+                        "street": data['direccion'],
+                        "exterior": data['direccion'],
+                        "interior": data['direccion'],
+                        "neighborhood": data['direccion'],
+                        "city": data['ciudad'],
+                        "municipality": data['ciudad'],
+                        "zip": data['codigo_postal'],
+                        "state": data['estado'],
+                    }
+                },
+                "customization": {
+                    "has_logo": data['logo'],
+                    "color": data['color'],
+                    "next_folio_number": data['next_folio_number'],
+                    "next_folio_number_test": data['next_folio_number_test'],
+                }
+            }
+            requests.put(f'https://www.facturapi.io/v2/organizations/{organizacion_id}', headers=headers, json=payload)
+
+            if data['cer_file'] and data['key_file'] and data['csd_password']:
+                files = {
+                    'cer': data['cer_file'],
+                    'key': data['key_file'],
+                    'password': (None, data['csd_password']),
+                }
+                requests.put(f'https://www.facturapi.io/v2/organizations/{organizacion_id}/certificate', headers=headers, files=files)
+
+            if data['logo_file']:
+                logo_files = {
+                    'file': data['logo_file'],
+                }
+                requests.put(f'https://www.facturapi.io/v2/organizations/{organizacion_id}/logo', headers=headers, files=logo_files)
+
+            return redirect('listar_organizaciones')
+    else:
+        form = OrganizationForm(initial={
+            'nombre': organizacion['legal']['name'],
+            'direccion': organizacion['legal']['address']['street'],
+            'codigo_postal': organizacion['legal']['address']['zip'],
+            'ciudad': organizacion['legal']['address']['city'],
+            'estado': organizacion['legal']['address']['state'],
+            'pais': organizacion['legal']['address']['country'],
+            'telefono': organizacion['legal']['phone'],
+            'email': organizacion['legal'].get('email', ''),
+            'sitio_web': organizacion['legal'].get('website', ''),
+            'color': organizacion['customization']['color'],
+            'logo': organizacion['customization']['has_logo'],
+            'next_folio_number': organizacion['customization']['next_folio_number'],
+            'next_folio_number_test': organizacion['customization']['next_folio_number_test'],
+        })
+
+    return render(request, 'facturador/organizaciones/editar_organizacion.html', {
+        'form': form,
+        'organizacion': organizacion,
+    })
+
+@superuser_required
+def eliminar_organizacion(request, organizacion_id):
+    headers = {
+        'Authorization': f'Bearer {FACTURAPI_KEY}',
+    }
+    requests.delete(f'https://www.facturapi.io/v2/organizations/{organizacion_id}', headers=headers)
+    return redirect('listar_organizaciones')
+
+@superuser_required
+def listar_clientes(request):
+    headers = {
+        "Authorization": f"Bearer {FACTURAPI_KEY}"
+    }
+
+    organizaciones = get_organizations()  # Assuming you have a function to get organizations
+    
+    for organizacion in organizaciones:
+        url = f"https://www.facturapi.io/v2/customers"
+        params = {
+            'page': 1,
+            'limit': 100,
+        }
+        response = requests.get(url, headers=headers, params=params)
+        
+        if response.status_code == 200:
+            organizacion.customers = response.json().get('data', [])
+        else:
+            organizacion.customers = []
+
+    return render(request, 'facturador/clientes/listar_clientes.html', {'organizaciones': organizaciones})
+
+@superuser_required
+def listar_facturas(request, organizacion_id):
+    headers = {
+        "Authorization": f"Bearer {FACTURAPI_KEY}"
+    }
+
+    base_url = "https://www.facturapi.io/v2/invoices"
+
+    params = {
+        'limit': 50
+    }
+
+    response = requests.get(base_url, headers=headers, params=params)
+    
+    if response.status_code == 200:
+        invoices = response.json().get('data', [])
+    else:
+        invoices = []
+        print(f"Error fetching invoices: {response.status_code} - {response.text}")
+
+    return render(request, 'facturador/facturas/listar_facturas.html', {'invoices': invoices, 'organizacion_id': organizacion_id})
+
+@superuser_required
+def descargar_factura(request, invoice_id):
+    api_key = settings.FACTURAPI_KEY
+    headers = {
+        "Authorization": f"Bearer {api_key}"
+    }
+
+    url = f"https://www.facturapi.io/v2/invoices/{invoice_id}/pdf"
+
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code == 200:
+        pdf_response = HttpResponse(response.content, content_type='application/pdf')
+        pdf_response['Content-Disposition'] = f'attachment; filename="invoice_{invoice_id}.pdf"'
+        return pdf_response
+    else:
+        raise Http404("Invoice not found or couldn't be downloaded")
+
+@superuser_required
+def cancelar_factura(request, invoice_id):
+    api_key = settings.FACTURAPI_KEY
+    headers = {
+        "Authorization": f"Bearer {api_key}"
+    }
+
+    url = f"https://www.facturapi.io/v2/invoices/{invoice_id}"
+
+    response = requests.delete(url, headers=headers)
+
+    if response.status_code == 200:
+        return HttpResponse("Invoice canceled successfully")
+    else:
+        raise Http404("Invoice not found or couldn't be canceled")
+
+
+@superuser_required
+def crear_factura(request, organization_id):
+    # Obtener la organización según el ID
+    organization = get_object_or_404(Organization, id=organization_id)
+
+    # Verificar si la solicitud es para un ambiente de prueba
+    is_test = request.GET.get('is_test', 'false').lower() == 'true'
+    api_key = organization.get_api_key(is_test=is_test)  # Obtener la clave API adecuada
+
+    if request.method == 'POST':
+        form = OrganizationForm(request.POST)
+        if form.is_valid():
+            datos_factura = form.cleaned_data
+            headers = {
+                'Authorization': f'Bearer {api_key}',
+                'Content-Type': 'application/json'
+            }
+            # Reemplazar con el endpoint correcto de FacturAPI y el payload de la factura
+            respuesta = requests.post('https://www.facturapi.io/v2/invoices', headers=headers, json=datos_factura)
+
+            if respuesta.status_code == 201:
+                return redirect('url_exito')  # Redirigir a una página de éxito
+            else:
+                # Manejar errores
+                return render(request, 'error_template.html', {'error': respuesta.json()})
+    
+    else:
+        form = OrganizationForm()
+
+    return render(request, 'crear_factura_template.html', {'form': form, 'organization': organization, 'is_test': is_test})
+
+
+
+
+
+def obtener_test_api_key(request, organization_id):
+    organization = get_object_or_404(Organization, id=organization_id)
+    url = f"https://www.facturapi.io/v2/organizations/{organization_id}/apikeys/test"
+    headers = {
+        "Authorization": f"Bearer {FACTURAPI_ORGANIZATION_KEY}"
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        test_api_key = response.json()
+        organization.test_api_key = test_api_key
+        organization.save()  # Update the model instance
+        return JsonResponse({'test_api_key': test_api_key})
+    else:
+        return JsonResponse({'error': response.text}, status=response.status_code)
+

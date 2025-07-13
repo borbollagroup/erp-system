@@ -1,0 +1,447 @@
+{% load static humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quotation {{ quotation.number }}</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+  <style>
+    /* 1) Nuke any default gap above the page */
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-family: 'Segoe UI', sans-serif;
+    background: #fff;
+  }
+
+  .header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #fff;
+    z-index: 1000;
+    border-bottom: 3px solid #0d3b66;
+    /* remove any accidental top margin */
+    margin-top: 0 !important;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .5rem 1rem;
+  }
+    .header-logo, .client-logo { max-height: 60px; }
+    .header-title {
+      flex: 1;
+      text-align: center;
+      padding: 0 .5rem;
+    }
+    .header-title h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #0d3b66;
+    }
+    .header-title small {
+      display: block;
+      font-size: .9rem;
+      color: #333;
+    }
+
+    /* 3) Mobile‐only tweaks */
+    @media (max-width: 576px) {
+      .header-logo, .client-logo { max-height: 40px; }
+      .header-title h1 { font-size: 1rem; }
+      .header-title small { font-size: .7rem; }
+    }
+
+  main {
+    /* just enough to clear the header's height (~70px) */
+    padding: 40px 1rem 60px;
+  }
+      .qr-code {
+        max-width: 60px;
+        width: 110px;
+        height: auto;
+      }
+
+    /* 4) Full‐width content on small screens */
+    img, table, .card {
+      max-width: 100% !important;
+    }
+
+    /* 5) Print rules for consistent desktop/mobile printing */
+    @media print {
+      /* hide print‐only controls */
+      .no-print { display: none !important; }
+
+      /* repeat table headers & footers on every page */
+      table thead { display: table-header-group !important; }
+      table tfoot { display: table-footer-group !important; }
+
+      /* prevent cards splitting across pages */
+      .card { page-break-inside: avoid !important; }
+
+      /* render the header only once */
+      .header {
+        position: static !important;
+        margin: 0 !important;
+      }
+      /* ensure content sits below header in print */
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER (fixed, only once) -->
+  <div class="header">
+    <div class="header-top">
+      <img src="{% static 'logos/logo.png' %}" alt="Logo" class="header-logo">
+      <div class="header-title">
+        <h1>Quotation {{ quotation.number }}</h1>
+        <small>Total: {{ grand_total|floatformat:"-0"|intcomma }} {{ quotation.coin }}</small>
+      </div>
+      <img src="{% static 'logos/restricted.png' %}" alt="Client Logo" class="client-logo">
+    </div>
+  </div>
+
+  <main class="container-fluid">
+
+<div class="row mb-4">
+  <!-- 1/4 width: client info -->
+  <div class="col-md-3">
+    <strong>Client Details</strong><br>
+    <strong>Client:</strong> {{ quotation.client.legal_name }}<br>
+    <strong>Address:</strong> {{ quotation.client.address }}<br>
+    <strong>Notify:</strong>
+    {% if quotation.notify_contacts.exists %}
+      {% for c in quotation.notify_contacts.all %}
+        {{ c.name }} &lt;{{ c.email }}&gt;{% if not forloop.last %},<br>{% endif %}
+      {% endfor %}
+    {% else %}
+      <span class="text-muted">—</span>
+    {% endif %}<br>
+    <strong>Phone:</strong> {{ quotation.client.phone }}
+  </div>
+
+  <!-- 1/4 width: quotation details -->
+  <div class="col-md-3">
+    <strong>Quotation Details</strong><br>
+    <strong>Issued:</strong> {{ quotation.date_issued|date:"Y-m-d" }}<br>
+    <strong>Valid Until:</strong> {{ quotation.valid_until|date:"Y-m-d" }}<br>
+    <strong>Currency:</strong> {{ quotation.coin }}
+  </div>
+
+  <div class="col-md-3 text-center">
+    <strong>Terms &amp; Warranty</strong><br>
+    <small class="text-muted">Scan for full terms:</small><br>
+    <img src="{{ qr_commercial }}" class="qr-code" alt="Commercial Terms QR">
+  </div>
+  <div class="col-md-3 text-center">
+    <strong>View Online</strong><br>
+    <small class="text-muted">Scan to view quotation:</small><br>
+    <img src="{{ qr_online }}" class="qr-code" alt="Online Quotation QR">
+  </div>
+</div>
+
+
+
+    </div>
+
+    <!-- 1. Summary -->
+    <div class="card mb-4">
+      <div class="card-header"><strong>1. Summary</strong></div>
+      <div class="card-body p-0">
+        <table class="table mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Description</th>
+              <th class="text-end">Materials</th>
+              <th class="text-end">Labor</th>
+              <th class="text-end">Equipment</th>
+              <th class="text-end">Extras</th>
+              <th class="text-end">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Totals</td>
+              <td class="text-end">{{ sum_material|floatformat:"-0"|intcomma }}</td>
+              <td class="text-end">{{ sum_labor|floatformat:"-0"|intcomma }}</td>
+              <td class="text-end">{{ sum_equip|floatformat:"-0"|intcomma }}</td>
+              <td class="text-end">{{ sum_extra|floatformat:"-0"|intcomma }}</td>
+              <td class="text-end fw-bold">{{ grand_total|floatformat:"-0"|intcomma }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  <!-- 2. Payment Milestones -->
+  <div class="card mb-4">
+    <div class="card-header"><strong>2. Payment Milestones</strong></div>
+    <div class="card-body p-0">
+      <table class="table mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Milestone</th>
+            <th class="text-end">%</th>
+            <th class="text-end">Amount ({{ quotation.coin }})</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in payment_rows %}
+          <tr>
+            <td>{{ row.label }}</td>
+            <td class="text-end">{{ row.pct }}%</td>
+            <td class="text-end">{{ row.amount|intcomma }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- 3. Project Timeline -->
+  <div class="card mb-4">
+    <div class="card-header"><strong>3. Project Timeline</strong></div>
+    <div class="card-body p-0">
+      <table class="table mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Phase</th>
+            <th class="text-center">Start</th>
+            <th class="text-center">End</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in timeline_rows %}
+          <tr>
+            <td>{{ t.label }}</td>
+            <td class="text-center">{{ t.start|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ t.end|date:"Y-m-d" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+    <!-- 4. Labor -->
+    <div class="card mb-4">
+      <div class="card-header"><strong>4. Labor</strong></div>
+      <div class="card-body p-0">
+        <table class="table mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Item</th><th class="text-end">Qty</th><th class="text-end">Days</th>
+              <th class="text-end">Unit Price</th><th class="text-end">Total</th><th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for it in labor_items %}
+            <tr>
+              <td>{{ it.description }}</td>
+              <td class="text-end">{{ it.qty|floatformat:"-0"|intcomma }}</td>
+              <td class="text-end">{{ it.days|floatformat:"-0"|intcomma }}</td>
+              <td class="text-end">{{ it.unit_price|floatformat:"-0"|intcomma }}</td>
+              <td class="text-end">{{ it.total_price|floatformat:"-0"|intcomma }}</td>
+              <td>{{ it.remarks }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center text-muted">No labor items.</td></tr>
+            {% endfor %}
+          </tbody>
+          <tfoot class="table-light">
+            <tr>
+              <td colspan="4" class="text-end fw-bold">Total Labor:</td>
+              <td class="text-end fw-bold">{{ sum_labor|floatformat:"-0"|intcomma }}</td><td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5. Materials -->
+    <div class="card mb-4">
+      <div class="card-header"><strong>5. Materials</strong></div>
+      <div class="card-body p-0">
+        <table class="table mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Spec</th><th class="text-end">Qty</th><th>Unit</th>
+              <th class="text-end">Unit Cost</th><th class="text-end">Total</th><th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for it in material_items %}
+            <tr>
+              <td>{{ it.description }}</td>
+              <td class="text-end">{{ it.qty|floatformat:"-0"|intcomma }}</td>
+              <td>Lot</td>
+              <td class="text-end">{{ it.unit_price|floatformat:"-0"|intcomma }}</td>
+              <td class="text-end">{{ it.total_price|floatformat:"-0"|intcomma }}</td>
+              <td>{{ it.remarks }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center text-muted">No materials.</td></tr>
+            {% endfor %}
+          </tbody>
+          <tfoot class="table-light">
+            <tr>
+              <td colspan="4" class="text-end fw-bold">Total Materials:</td>
+              <td class="text-end fw-bold">{{ sum_material|floatformat:"-0"|intcomma }}</td><td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- 6. Equipment -->
+    <div class="card mb-4">
+      <div class="card-header"><strong>6. Equipment</strong></div>
+      <div class="card-body p-0">
+        <table class="table mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Description</th><th class="text-end">Qty</th><th class="text-end">Days</th>
+              <th class="text-end">Unit Price</th><th class="text-end">Total</th><th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for it in equipment_items %}
+            <tr>
+              <td>{{ it.description }}</td>
+              <td class="text-end">{{ it.qty|floatformat:"-0"|intcomma }}</td>
+              <td class="text-end">{{ it.days|floatformat:"-0"|intcomma }}</td>
+              <td class="text-end">{{ it.unit_price|floatformat:"-0"|intcomma }}</td>
+              <td class="text-end">{{ it.total_price|floatformat:"-0"|intcomma }}</td>
+              <td>{{ it.remarks }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center text-muted">No equipment.</td></tr>
+            {% endfor %}
+          </tbody>
+          <tfoot class="table-light">
+            <tr>
+              <td colspan="4" class="text-end fw-bold">Total Equipment:</td>
+              <td class="text-end fw-bold">{{ sum_equip|floatformat:"-0"|intcomma }}</td><td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- 7. Overhead -->
+    <div class="card mb-4">
+      <div class="card-header"><strong>7. Overhead</strong></div>
+      <div class="card-body p-0">
+        <table class="table mb-0">
+          <thead class="table-light">
+            <tr><th>Description</th><th class="text-end">Amount</th></tr>
+          </thead>
+          <tbody>
+            {% for it in overhead_items %}
+            <tr>
+              <td>{{ it.description }}</td>
+              <td class="text-end">{{ it.total_price|floatformat:"-0"|intcomma }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="2" class="text-center text-muted">No overhead.</td></tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td class="text-end fw-bold">Total Overhead:</td>
+              <td class="text-end fw-bold">{{ sum_extra|floatformat:"-0"|intcomma }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- 8. Drawings -->
+    <div class="card mb-4">
+      <div class="card-header"><strong>8. Project Drawings</strong></div>
+      <div class="card-body">
+        {% if drawings %}
+          <div class="row g-3">
+            {% for d in drawings %}
+            <div class="col-sm-6 col-md-4">
+              <div class="card h-100">
+                {% with fname=d.file.name|lower %}
+                    {% if fname|slice:"-4:" == ".jpg" or fname|slice:"-5:" == ".jpeg" or fname|slice:"-4:" == ".png" or fname|slice:"-4:" == ".gif" or fname|slice:"-4:" == ".bmp" or fname|slice:"-5:" == ".webp" %}
+                        <img src="{{ d.file.url }}"
+                            class="card-img-top"
+                            style="object-fit:cover; height:150px"
+                            alt="{{ d.description|default:'Drawing' }}">
+                    {% else %}
+                        <div class="card-img-top d-flex align-items-center justify-content-center"
+                            style="height:150px; background-color:#f8f9fa;">
+                        <small class="text-muted">No preview available</small>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                <div class="card-body p-2">
+                  <h6 class="card-title">{{ d.description|default:"Drawing" }}</h6>
+                  <a href="{{ d.file.url }}" download class="btn btn-sm btn-outline-primary">Download</a>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="text-muted">No drawings attached.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- 9. Payment Procedures -->
+    <div class="card mb-4">
+      <div class="card-header"><strong>9. Payment Procedures</strong></div>
+      <div class="card-body">
+        <p><a href="{% static 'billing/pdf/Payment Procedures.pdf' %}" class="btn btn-outline-secondary btn-sm" download>
+          Download Payment Procedures (PDF)
+        </a></p>
+        <div class="row">
+          <div class="col-md-6">
+            <table class="table table-bordered mb-0">
+              <tbody>
+                <tr><th>Bank</th><td>Banco Monex S.A.</td></tr>
+                <tr><th>SPID CLABE</th><td>112962000030697626</td></tr>
+                <tr><th>Reference</th><td>{{ quotation.number }}</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-6">
+            <table class="table table-bordered mb-0">
+              <tbody>
+                <tr><th>Bank</th><td>Banco Monex S.A.</td></tr>
+                <tr><th>SPEI CLABE</th><td>112180000030697628</td></tr>
+                <tr><th>Reference</th><td>{{ quotation.number }}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Print button -->
+    <div class="text-end mb-4 no-print">
+      <button onclick="window.print()" class="btn btn-secondary">
+        <i class="bi bi-printer-fill"></i> Print
+      </button>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

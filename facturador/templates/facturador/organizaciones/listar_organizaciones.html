@@ -1,0 +1,123 @@
+{% extends 'facturador/base.html' %}
+
+{% block title %}Lista de Organizaciones{% endblock %}
+
+{% block content %}
+<section id="organization-list">
+    <h2 class="mb-4">Lista de Organizaciones</h2>
+    <div class="row justify-content-center">
+        {% for organizacion in organizaciones %}
+	<div class="card-container">
+            api_key = {{ organizacion.test_api_key }}
+        </div>
+        <div class="col-md-12 mb-4 card-container">
+            <div class="card border-light">
+                <div class="card-header bg-white text-dark d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">{{ organizacion.legal_name }}</h5>
+                    {% if organizacion.is_production_ready %}
+                        <span class="badge badge-success">Producción Activa</span>
+                    {% else %}
+                        <span class="badge badge-warning">Pendiente</span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Datos Legales</h6>
+                    <p class="card-text">
+                        <strong>Nombre Fiscal:</strong> {{ organizacion.legal_name }}<br>
+                        <strong>Régimen Fiscal:</strong> {{ organizacion.tax_system }}<br>
+                        <strong>Sitio Web:</strong> <a href="{{ organizacion.website }}" target="_blank" class="text-dark">{{ organizacion.website }}</a><br>
+                        <strong>Teléfono:</strong> {{ organizacion.phone }}<br>
+                        <strong>Dirección:</strong> {{ organizacion.street }} , {{ organizacion.exterior }}-{{ organizacion.interior }} , {{ organizacion.neighborhood }}, {{ organizacion.city }}, {{ organizacion.state }} , {{ organizacion.country }} , ZIP : {{ organizacion.zip_code }}
+                    </p>
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center">
+                        <div>
+
+				{% if organizacion.organization_id %}
+				    <a href="{% url 'editar_organizacion' organizacion.organization_id %}" class="text-dark">Editar</a>
+    				    <a href="{% url 'eliminar_organizacion' organizacion.organization_id %}" class="text-dark ml-2">Eliminar</a>
+				{% else %}
+    					<p>Error: Missing organization ID.</p>
+				{% endif %}
+
+                        </div>
+                        {% if organizacion.is_production_ready %}
+                            <div class="d-flex flex-column flex-sm-row">
+                                <a href="#" class="btn-minimal btn-primary btn-sm mr-2 mb-2">Crear Factura</a>
+                                <a href="#" class="btn-minimal btn-warning btn-sm mr-2 mb-2">Crear Recibo</a>
+                                <a href="#" class="btn-minimal btn-success btn-sm mr-2 mb-2">Crear Producto</a>
+                                <a href="#" class="btn-minimal btn-danger btn-sm mb-2">Cobranza</a>
+                            </div>
+                        {% else %}
+                            <div class="d-flex flex-column flex-sm-row">
+                                <a href="#" class="btn-minimal btn-primary btn-sm btn-disabled mr-2 mb-2">Crear Factura</a>
+                                <a href="#" class="btn-minimal btn-warning btn-sm btn-disabled mb-2">Crear Recibo</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <ul class="nav nav-pills card-header-pills justify-content-center flex-column flex-sm-row">
+                        {% if organizacion.is_production_ready %}
+			    <li class="nav-item mb-2">
+			        {% if organizacion.test_api_key %}
+             			   <a class="nav-link active" href="{% url 'listar_clientes' organizacion.test_api_key %}">Clientes</a>
+            		        {% else %}
+                		    <span class="nav-link disabled">Clientes</span>
+            		        {% endif %}
+        		    </li>
+                            <li class="nav-item mb-2">
+                                <a class="nav-link" href="#">Recibos</a>
+                            </li>
+                            <li class="nav-item mb-2">
+                                <a class="nav-link" href="#">Proyectos</a>
+                            </li>
+                            <li class="nav-item mb-2">
+                                <a class="nav-link" href="#">Productos</a>
+                            </li>
+                            <li class="nav-item mb-2">
+                                <a class="nav-link" href="#">Retenciones</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item mb-2">
+                                <span class="nav-link disabled">Certificados</span>
+                            </li>
+                            <li class="nav-item mb-2">
+                                <span class="nav-link disabled">Logotipo</span>
+                            </li>
+                            <li class="nav-item mb-2">
+                                <span class="nav-link disabled">Elegir Dominio</span>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item mb-2">
+                            <a class="nav-link" href="/facturador/organizations/{{ organizacion.id }}/api_keys/">API Keys | {{ organizacion.id }}</a>
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+<p>
+{{ organizaciones }}
+</p>
+
+<section id="health-check" class="mt-5">
+    <h4>Health Check</h4>
+    <form action="/check" method="get">
+        <button type="submit" class="btn btn-primary">Check API Health</button>
+    </form>
+</section>
+
+<section id="rfc-validation" class="mt-5">
+    <h4>Validar RFC</h4>
+    <form action="/tools/tax_id_validation" method="get">
+        <div class="form-group">
+            <label for="rfc">RFC</label>
+            <input type="text" class="form-control" id="rfc" name="tax_id" placeholder="Enter RFC">
+        </div>
+        <button type="submit" class="btn btn-primary">Validate RFC</button>
+    </form>
+</section>
+{% endblock %}

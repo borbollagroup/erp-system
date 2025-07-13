@@ -1,0 +1,25 @@
+{# templates/billing/quotation_confirm_delete.html #}
+{% extends "reportes/base.html" %}
+{% load static %}
+
+{% block title %}Delete Quotation {{ quotation.number }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">Delete Quotation</h2>
+  <div class="alert alert-warning">
+    Are you sure you want to permanently delete quotation 
+    <strong>{{ quotation.number }}</strong> for 
+    <em>{{ quotation.project }}</em>?
+  </div>
+  <form method="post">
+    {% csrf_token %}
+    <a href="{% url 'billing:quotation_detail' quotation.pk %}" class="btn btn-secondary">
+      Cancel
+    </a>
+    <button type="submit" class="btn btn-danger">
+      Yes, Delete
+    </button>
+  </form>
+</div>
+{% endblock %}

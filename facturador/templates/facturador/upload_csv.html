@@ -1,0 +1,106 @@
+{% extends "facturador/base_conta.html" %}
+
+{% block content %}
+    <h2>Subir Archivos CSV de Recibidos y Emitidos</h2>
+    
+    {% if error %}
+        <div style="color: red; background-color: #f8d7da; padding: 10px; border-radius: 5px;">
+            <strong>Error:</strong> {{ error }}
+        </div>
+    {% endif %}
+    
+    <form method="POST" enctype="multipart/form-data" style="margin-bottom: 20px;">
+        {% csrf_token %}
+        <div style="margin-bottom: 10px;">
+            <label for="recibidos_file"><strong>Archivo CSV de Recibidos:</strong></label>
+            <input type="file" name="recibidos_file" accept=".csv" required style="margin-left: 10px;">
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label for="emitidos_file"><strong>Archivo CSV de Emitidos:</strong></label>
+            <input type="file" name="emitidos_file" accept=".csv" required style="margin-left: 10px;">
+        </div>
+
+        <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Enviar
+        </button>
+    </form>
+
+    {% if not recibidos_data and not emitidos_data %}
+        <p style="color: #ff9800; font-weight: bold;">No hay datos disponibles para el mes actual.</p>
+    {% endif %}
+
+    {% if recibidos_data %}
+        <h3>Datos de Recibidos (Mes Actual)</h3>
+        <div style="overflow-x:auto;">
+            <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+                <thead style="background-color: #f2f2f2;">
+                    <tr>
+                        <th>UUID</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>RFC Emisor</th>
+                        <th>Razón Social Emisor</th>
+                        <th>RFC Receptor</th>
+                        <th>Razón Social Receptor</th>
+                        <th>Total</th>
+                        <th>Proceso</th>
+                        <th>Responsable</th>
+                        <th>Referencia</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in recibidos_data %}
+                        <tr>
+                            {% for cell in row %}
+                                <td>{{ cell }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    {% if emitidos_data %}
+        <h3>Datos de Emitidos (Mes Actual)</h3>
+        <div style="overflow-x:auto;">
+            <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+                <thead style="background-color: #f2f2f2;">
+                    <tr>
+                        <th>GUID</th>
+                        <th>Fecha Comprobante</th>
+                        <th>Tipo Comprobante</th>
+                        <th>Serie</th>
+                        <th>Folio</th>
+                        <th>RFC Receptor</th>
+                        <th>Nombre Receptor</th>
+                        <th>Régimen Fiscal</th>
+                        <th>Moneda</th>
+                        <th>Tipo de Cambio</th>
+                        <th>Total</th>
+                        <th>Método de Pago</th>
+                        <th>Estado Cancelación</th>
+                        <th>Fecha Cancelación</th>
+                        <th>Tipo Documento</th>
+                        <th>Versión Comprobante</th>
+                        <th>Estatus Pagado</th>
+                        <th>Tipo Comprobante Código</th>
+                        <th>ID Pago</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in emitidos_data %}
+                        <tr>
+                            {% for cell in row %}
+                                <td>{{ cell }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+{% endblock %}

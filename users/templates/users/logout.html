@@ -1,0 +1,22 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logged Out</title>
+    <link rel="stylesheet" href="{% static 'landing/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/style.css' %}">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>You have been logged out</h2>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Log In Again <a class="ml-2" href="{% url 'login' %}">Login</a><br>
+                Return to Main Page <a class="ml-2" href="{% url 'landing-page-home' %}">Home</a>
+            </small>
+        </div>
+    </div>
+</body>
+</html>

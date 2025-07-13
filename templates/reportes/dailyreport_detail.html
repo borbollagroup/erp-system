@@ -1,0 +1,149 @@
+{% extends "reportes/base.html" %}
+{% load static %}
+
+{% block title %}Report – {{ report.project.name }} @ {{ report.date }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Print in landscape on letter, no margins */
+  @page { size: letter landscape; margin: 0; }
+  @media print {
+    body, html { width: 11in; height: 8.5in; margin: 0; }
+    .no-print { display: none !important; }
+    header, footer { position: fixed; width: 100%; }
+    header { top: 0; height: 70px; }
+    footer { bottom: 0; height: 30px; font-size: .75rem; text-align: center; }
+    .content { margin: 80px 20px 50px; }
+    .page-break { page-break-before: always; }
+  }
+  @media screen {
+    .content { margin: 20px; }
+  }
+  .table-sm th, .table-sm td { padding: .3rem; }
+  .img-thumb { object-fit: cover; width: 100%; height: 120px; border:1px solid #ddd; }
+</style>
+{% endblock %}
+
+{% block content %}
+<header class="d-none d-print-flex justify-content-between align-items-center px-4 py-2">
+  <img src="{% static 'logos/logo.png' %}" style="max-height:40px;" alt="Company">
+  <h3 class="m-0">Daily Work Report</h3>
+  <img src="{% static 'logos/hts-logo.png' %}" style="max-height:40px;" alt="Client">
+</header>
+
+<div class="content container-fluid">
+  <!-- Top info row -->
+  <div class="row align-items-start mb-3">
+    <div class="col-md-6">
+      <h5>Project Info</h5>
+      <p class="mb-1"><strong>Customer:</strong> {{ report.project.client.legal_name }}</p>
+      <p class="mb-1"><strong>Project:</strong> {{ report.project.name }}</p>
+      <p class="mb-1"><strong>Location:</strong> {{ report.project.location_city }}</p>
+    </div>
+    <div class="col-md-6 text-md-end">
+      <h5>Report Meta</h5>
+      <p class="mb-1"><strong>Date:</strong> {{ report.date }}</p>
+      <p class="mb-1"><strong>Author:</strong> {{ report.created_by.get_full_name|default:report.created_by }}</p>
+      <p class="mb-1"><strong>Folio:</strong> {{ report.pk }}</p>
+      <button onclick="window.print()" class="btn btn-outline-secondary btn-sm no-print">Print</button>
+    </div>
+  </div>
+  <hr>
+
+  <!-- Data tables -->
+  <div class="row">
+    <div class="col-lg-6">
+      <h6>Weather & Manpower</h6>
+      <table class="table table-bordered table-sm mb-3">
+        <tbody>
+          <tr>
+            <th>Temp</th><td>{{ report.temp_c }}°C</td>
+            <th>Wind</th><td>{{ report.wind_kmh }} km/h</td>
+          </tr>
+          <tr>
+            <th>Cond</th><td colspan="3">{{ report.condition }}</td>
+          </tr>
+          <tr>
+            <th>Humidity</th><td colspan="3">{{ report.humidity_pct }}%</td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table table-sm">
+        <thead class="table-light">
+          <tr><th>Role</th><th>Qty</th><th>Hrs</th><th>Comments</th></tr>
+        </thead>
+        <tbody>
+          {% for m in report.manpower.all %}
+          <tr>
+            <td>{{ m.role }}</td>
+            <td>{{ m.quantity }}</td>
+            <td>{{ m.hours }}</td>
+            <td>{{ m.comments|default:"—" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" class="text-center text-muted">No manpower entries.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="page-break"></div>
+    <br><br><br><br>
+    <div class="col-lg-6">
+      <h6>Equipment & Activities</h6>
+      <table class="table table-sm mb-3">
+        <thead class="table-light">
+          <tr><th>Equip</th><th>Qty</th><th>Hrs Used</th><th>Comments</th></tr>
+        </thead>
+        <tbody>
+          {% for e in report.equipment.all %}
+          <tr>
+            <td>{{ e.equipment }}</td>
+            <td>{{ e.quantity }}</td>
+            <td>{{ e.hours_used }}</td>
+            <td>{{ e.comments|default:"—" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" class="text-center text-muted">No equipment entries.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <table class="table table-sm">
+        <thead class="table-light">
+          <tr><th>Activity</th><th>Qty</th><th>Unit</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          {% for a in report.activities.all %}
+          <tr>
+            <td>{{ a.activity }}</td>
+            <td>{{ a.quantity }}</td>
+            <td>{{ a.unit }}</td>
+            <td>{{ a.description|default:"—" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" class="text-center text-muted">No activities logged.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Photos grid -->
+  <h6 class="mt-4">Photographs</h6>
+  <div class="row">
+    {% for p in report.photos.all %}
+      <div class="col-6 col-sm-4 col-md-3 mb-3">
+        <a href="{{ p.photo.url }}" target="_blank">
+          <img src="{{ p.photo.url }}" class="img-thumb rounded">
+        </a>
+      </div>
+    {% empty %}
+      <p class="text-muted">No photos uploaded.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<footer class="no-print text-center py-2">
+  <hr>
+  <small>Borbolla Automation Inc. © {{ now.year }} — Work Report</small>
+</footer>
+{% endblock %}

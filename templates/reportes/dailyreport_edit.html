@@ -1,0 +1,140 @@
+{% extends "reportes/base.html" %}
+{% load static %}
+
+{% block title %}Edit Daily Report: {{ object.project.name }} – {{ object.date }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<style>
+  .formset-row { position: relative; margin-bottom: 1rem; padding: 1rem; border: 1px solid #dee2e6; border-radius: .25rem; }
+  .remove-btn { position: absolute; top: .5rem; right: .5rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h2>Edit Daily Report</h2>
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Project</label>
+        <input type="text" class="form-control" value="{{ object.project.name }}" readonly>
+      </div>
+      <div class="col-md-3">
+        {{ form.date.label_tag }}
+        {{ form.date }}
+        {{ form.date.errors }}
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Author</label>
+        <input type="text" class="form-control" value="{{ object.created_by.get_full_name|default:object.created_by }}" readonly>
+      </div>
+    </div>
+
+    <hr>
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        {{ form.temp_c.label_tag }}
+        {{ form.temp_c }}
+        {{ form.temp_c.errors }}
+      </div>
+      <div class="col-md-3">
+        {{ form.condition.label_tag }}
+        {{ form.condition }}
+        {{ form.condition.errors }}
+      </div>
+      <div class="col-md-3">
+        {{ form.wind_kmh.label_tag }}
+        {{ form.wind_kmh }}
+        {{ form.wind_kmh.errors }}
+      </div>
+      <div class="col-md-3">
+        {{ form.humidity_pct.label_tag }}
+        {{ form.humidity_pct }}
+        {{ form.humidity_pct.errors }}
+      </div>
+    </div>
+
+    <hr>
+    <h4>Manpower</h4>
+    <div id="manpower-formset">
+      {{ manpower_formset.management_form }}
+      {% for f in manpower_formset.forms %}
+      <div class="formset-row">
+        <button type="button" class="btn btn-danger btn-sm remove-btn">&times;</button>
+        <div class="row g-2">
+          <div class="col-md-4">{{ f.role.label_tag }} {{ f.role }}</div>
+          <div class="col-md-2">{{ f.quantity.label_tag }} {{ f.quantity }}</div>
+          <div class="col-md-2">{{ f.hours.label_tag }} {{ f.hours }}</div>
+          <div class="col-md-4">{{ f.comments.label_tag }} {{ f.comments }}</div>
+        </div>
+      </div>
+      {% endfor %}
+      <button type="button" class="btn btn-outline-primary" id="add-manpower">Add Manpower</button>
+    </div>
+
+    <hr>
+    <h4>Equipment</h4>
+    <div id="equipment-formset">
+      {{ equipment_formset.management_form }}
+      {% for f in equipment_formset.forms %}
+      <div class="formset-row">
+        <button type="button" class="btn btn-danger btn-sm remove-btn">&times;</button>
+        <div class="row g-2">
+          <div class="col-md-4">{{ f.equipment.label_tag }} {{ f.equipment }}</div>
+          <div class="col-md-2">{{ f.quantity.label_tag }} {{ f.quantity }}</div>
+          <div class="col-md-3">{{ f.hours_used.label_tag }} {{ f.hours_used }}</div>
+          <div class="col-md-3">{{ f.comments.label_tag }} {{ f.comments }}</div>
+        </div>
+      </div>
+      {% endfor %}
+      <button type="button" class="btn btn-outline-primary" id="add-equipment">Add Equipment</button>
+    </div>
+
+    <hr>
+    <h4>Activities</h4>
+    <div id="activities-formset">
+      {{ activity_formset.management_form }}
+      {% for f in activity_formset.forms %}
+      <div class="formset-row">
+        <button type="button" class="btn btn-danger btn-sm remove-btn">&times;</button>
+        <div class="row g-2">
+          <div class="col-md-3">{{ f.activity.label_tag }} {{ f.activity }}</div>
+          <div class="col-md-2">{{ f.quantity.label_tag }} {{ f.quantity }}</div>
+          <div class="col-md-3">{{ f.unit.label_tag }} {{ f.unit }}</div>
+          <div class="col-md-4">{{ f.description.label_tag }} {{ f.description }}</div>
+        </div>
+      </div>
+      {% endfor %}
+      <button type="button" class="btn btn-outline-primary" id="add-activity">Add Activity</button>
+    </div>
+
+    <hr>
+    <h4>Photos</h4>
+    <div id="photo-formset">
+      {{ photo_formset.management_form }}
+      {% for f in photo_formset.forms %}
+      <div class="formset-row">
+        <button type="button" class="btn btn-danger btn-sm remove-btn">&times;</button>
+        <div class="row g-2 align-items-center">
+          <div class="col-md-8">{{ f.photo.label_tag }} {{ f.photo }}</div>
+          <div class="col-md-4">
+            {% if f.instance.photo %}
+            <img src="{{ f.instance.photo.url }}" class="img-thumbnail" style="max-height:100px;">
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <button type="button" class="btn btn-outline-primary" id="add-photo">Add Photo</button>
+    </div>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-success">Save Changes</button>
+      <a href="{% url 'reportes:dailyreport_detail' object.pk %}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>

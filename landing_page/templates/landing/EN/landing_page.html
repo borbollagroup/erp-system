@@ -1,0 +1,740 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="zxx">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Engineering + Rigging Portfolio</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="manifest" href="{% static 'landing/site.webmanifest' %}">
+        <link rel="apple-touch-icon" href="{% static 'landing/icon.png' %}">
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'landing/img/favicon.png' %}">
+
+        <!-- All css here -->
+        <link rel="stylesheet" href="{% static 'landing/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/fontawesome-all.min.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/slick.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/magnific-popup.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/meanmenu.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/nice-select.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/animate.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/default.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'landing/css/responsive.css' %}">
+    </head>
+    <body>
+        <!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+
+        <!-- header start -->
+        <header class="transparent-header">
+            <div class="header-top-area">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-6 d-flex align-items-center">
+                            <div class="language f-left">
+                                <ul>
+                                    <li><a href="#" style="color: white;">English <i class="fas fa-angle-down"></i></a>
+                                        <ul>
+                                            <li><a href="#" style="color: white;">English 1</a></li>
+                                            <li><a href="#" style="color: white;">English 2</a></li>
+                                            <li><a href="#" style="color: white;">English 3</a></li>
+                                            <li><a href="#" style="color: white;">English 4</a></li>
+                                            <li><a href="#" style="color: white;">English 5</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="social-icon f-left d-none d-md-block">
+                                <a href="#"><i class="fab fa-facebook-f" style="color: white;"></i></a>
+                                <a href="#"><i class="fab fa-twitter" style="color: white;"></i></a>
+                                <a href="#"><i class="fab fa-instagram" style="color: white;"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                            <div class="header-right f-right">
+                                <ul>
+                                    <li><a href="#"><i class="fas fa-search" style="color: white;"></i></a>
+                                        <div class="search-form">
+                                            <form action="#">
+                                                <input type="text" placeholder="Search" style="color: white;">
+                                                <button><i class="fas fa-search"></i></button>
+                                            </form>
+                                        </div>
+                                    </li>
+                                    <li><a href="#"><i class="fas fa-shopping-cart" style="color: white;"></i></a></li>
+                                    <li class="info-bar"><a href="#"><i class="fas fa-bars" style="color: white;"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="extra-info">
+                <div class="close-icon">
+                    <button><i class="far fa-window-close"></i></button>
+                </div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Ut enim ad minim veniam, quis nostrudexe rc itation ullamco laboris nisi ut aliquip ex ea com modo consequat. Duis aute irure.</p>
+                <div class="instagram">
+                    <a href="#"><img src="{% static 'landing/img/instagram/insta1.png' %}" alt=""></a>
+                    <a href="#"><img src="{% static 'landing/img/instagram/insta2.png' %}" alt=""></a>
+                    <a href="#"><img src="{% static 'landing/img/instagram/insta3.png' %}" alt=""></a>
+                    <a href="#"><img src="{% static 'landing/img/instagram/insta4.png' %}" alt=""></a>
+                    <a href="#"><img src="{% static 'landing/img/instagram/insta5.png' %}" alt=""></a>
+                    <a href="#"><img src="{% static 'landing/img/instagram/insta6.png' %}" alt=""></a>
+                </div>
+                <div class="social-icon-right mt-30">
+                    <a href="#">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#">
+                        <i class="fab fa-google-plus-g"></i>
+                    </a>
+                    <a href="#">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="header-bottom-area">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-xl-3 col-lg-3">
+                            <div class="logo">
+                                <a href="/"><img src="{% static 'landing/img/logo/white-logo.png' %}" alt="" width="275px" height="53px"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- header end -->
+
+            <!-- slider start -->
+    <div class="slider-area">
+        <div class="slider-active dot-style" data-starting-slide="{{ default_slide }}">
+            <!-- Slide 1 -->
+            <div class="single-slider height-100 d-flex align-items-center" style="background-image:url('{% static "landing/img/slider/slide1.jpg" %}')">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-7 d-flex align-items-center">
+                            <div class="slider-content pt-110">
+                                <span data-animation="fadeInLeft" data-delay=".5s" style="color: white;">Comprehensive Industrial Solutions</span>
+                                <h1 data-animation="fadeInLeft" data-delay="1s" style="color: white;">ENGINEERING SUCCESS TOGETHER</h1>
+                                <p data-animation="fadeInLeft" data-delay="1.5s" style="color: white;">We specialize in providing advanced engineering, construction, and machinery solutions to optimize your industrial processes.</p>
+                                <a data-animation="fadeInLeft" data-delay="2s" href="#" class="btn">Explore Services</a>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-5 d-none d-lg-block">
+                            <div class="slide-img text-right pt-120 slider-full f-right" data-animation="fadeInRight" data-delay="2.5s">
+                                <img src="{% static 'landing/img/slider/transparent-slide.png' %}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Slide 2 -->
+            <div class="single-slider height-100 d-flex align-items-center" style="background-image:url('{% static "landing/img/slider/slide2.jpg" %}')">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-7 d-flex align-items-center">
+                            <div class="slider-content pt-110">
+                                <span data-animation="fadeInLeft" data-delay=".5s" style="color: white;">Innovative Industrial Engineering</span>
+                                <h1 data-animation="fadeInLeft" data-delay="1s" style="color: white;">DRIVING EFFICIENCY FORWARD</h1>
+                                <p data-animation="fadeInLeft" data-delay="1.5s" style="color: white;">Our expertise in engineering and machinery ensures your operations are efficient and sustainable, meeting the highest industry standards.</p>
+                                <a data-animation="fadeInLeft" data-delay="2s" href="#" class="btn">Learn More</a>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-5 d-none d-lg-block">
+                            <div class="slide-img text-right pt-120 slider-full f-right" data-animation="fadeInRight" data-delay="2.5s">
+                                <img src="{% static 'landing/img/slider/transparent-slide.png' %}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Slide 3 -->
+            <div class="single-slider height-100 d-flex align-items-center" style="background-image:url('{% static "landing/img/slider/slide3.jpg" %}')">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-7 d-flex align-items-center">
+                            <div class="slider-content pt-110">
+                                <span data-animation="fadeInLeft" data-delay=".5s" style="color: white;">Precision and Quality</span>
+                                <h1 data-animation="fadeInLeft" data-delay="1s" style="color: white;">TRANSFORMING INDUSTRIAL SPACES</h1>
+                                <p data-animation="fadeInLeft" data-delay="1.5s" style="color: white;">We deliver top-tier construction and installation services, ensuring that your facilities are optimized for performance and safety.</p>
+                                <a data-animation="fadeInLeft" data-delay="2s" href="#" class="btn">Contact Us</a>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-5 d-none d-lg-block">
+                            <div class="slide-img text-right pt-120 slider-full f-right" data-animation="fadeInRight" data-delay="5s">
+                                <img src="{% static 'landing/img/slider/transparent-slide.png' %}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- slider end -->
+
+        <!-- features-area start -->
+        <div class="features-area pt-100 pb-70">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="features-title text-center mb-80">
+                            <h2>Empowering Your Industry <br> <span>with Precision and Excellence.</span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 col-md-4">
+                        <div class="single-features text-center mb-30">
+                            <i class="fas fa-industry fa-3x"></i>
+                            <h2>Design & Turnkey Projects</h2>
+                            <p>We manage the entire process from design to execution, delivering complete construction services as turnkey projects—on time and within budget.</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4">
+                        <div class="single-features text-center mb-30">
+                            <i class="fas fa-dolly fa-3x"></i>
+                            <h2>Rigging & Installation Services</h2>
+                            <p>We provide full rigging services, including machinery layout changes, installation, engineering solutions, and utility connections, enhancing your facility’s efficiency.</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4">
+                        <div class="single-features text-center mb-30">
+                            <i class="fas fa-code fa-3x"></i>
+                            <h2>Instrumentation & Automation</h2>
+                            <p>We specialize in designing and executing complete instrumentation projects, integrating sensor data with SCADA systems, OEE systems, and related automation solutions, including MCC design and installation, to optimize processes and services.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- features-area end -->
+
+        <!-- promotion-area start -->
+        <div class="promotion-area pt-50 pb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6">
+                        <div class="cta-img">
+                            <img src="{% static 'landing/img/bg/cta.jpg' %}" alt="Industrial Project">
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6">
+                        <div class="promotion-text promo-2">
+                            <h3>Don’t Miss Out on Our Expertise—Start Your Project Today!</h3>
+                            <span>Innovative Solutions for Your Industry</span>
+                            <P>Partner with us for top-tier industrial solutions, from design to execution. Our team ensures your projects are completed on time and within budget, maximizing efficiency and reliability.</P>
+                            <a href="#" class="btn brand-btn btn-2">GET STARTED</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- promotion-area end -->
+
+        <!-- portfolio-area start -->
+        <div class="portfolio-area pt-100 pb-100">
+            <div class="container-full">
+                <div class="row no-gutters">
+                    <div class="col-xl-12">
+                        <div class="section-title section-title-2 text-center mb-50">
+                            <h2>Recent Projects</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-gutters grid">
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img1.jpg' %}" alt="Indoor Machinery Installation">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img1.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Indoor Machinery Installation</a></h3>
+                                <span style="color: white;">Efficient setup of machinery within a factory setting.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img2.jpg' %}" alt="Heavy Equipment Operation">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img2.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Heavy Equipment Operation</a></h3>
+                                <span style="color: white;">Operating heavy lifting equipment to manage complex installations.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img3.jpg' %}" alt="Precision Machinery Setup">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img3.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Precision Machinery Setup</a></h3>
+                                <span style="color: white;">Aligning machinery for optimized production.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img4.jpg' %}" alt="Crane Installation Service">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img4.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Crane Installation Service</a></h3>
+                                <span style="color: white;">Heavy-duty crane service for industrial equipment.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img5.jpg' %}" alt="Dual Lift Equipment">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img5.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Dual Lift Equipment</a></h3>
+                                <span style="color: white;">Coordinated lifting for large-scale equipment.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img6.jpg' %}" alt="Structural Frame Assembly">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img6.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Structural Frame Assembly</a></h3>
+                                <span style="color: white;">Construction of support structures in industrial settings.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img7.jpg' %}" alt="Industrial Flooring Preparation">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img7.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Industrial Flooring Preparation</a></h3>
+                                <span style="color: white;">Preparing and laying foundation for industrial floors.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img8.jpg' %}" alt="Concrete Reinforcement">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img8.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Concrete Reinforcement</a></h3>
+                                <span style="color: white;">Reinforcing concrete structures for industrial use.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img9.jpg' %}" alt="Heavy Machine Setup">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img9.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Heavy Machine Setup</a></h3>
+                                <span style="color: white;">Setting up heavy machinery for production.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img10.jpg' %}" alt="Cable Management & Installation">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img10.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Cable Management & Installation</a></h3>
+                                <span style="color: white;">Managing and installing cabling for industrial automation.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img11.jpg' %}" alt="Industrial Piping Systems">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img11.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Industrial Piping Systems</a></h3>
+                                <span style="color: white;">Installation of complex industrial piping systems.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img12.jpg' %}" alt="High-Altitude Structural Work">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img12.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">High-Altitude Structural Work</a></h3>
+                                <span style="color: white;">High-altitude structural work using a Genie boom lift.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img13.jpg' %}" alt="Electrical Control Panels">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img13.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Electrical Control Panels</a></h3>
+                                <span style="color: white;">Electrical control panels ready for installation.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img14.jpg' %}" alt="Advanced Electrical Setup">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img14.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Advanced Electrical Setup</a></h3>
+                                <span style="color: white;">Advanced electrical panel setup for industrial use.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img15.jpg' %}" alt="Real-Time Production Dashboard">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img15.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Real-Time Production Dashboard</a></h3>
+                                <span style="color: white;">Production dashboard displaying real-time metrics.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img16.jpg' %}" alt="Industrial Building Construction">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img16.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Industrial Building Construction</a></h3>
+                                <span style="color: white;">Construction of a large industrial building.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img17.jpg' %}" alt="Grove Crane Setup">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img17.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Grove Crane Setup</a></h3>
+                                <span style="color: white;">Grove crane setup for machine and steel structure mounting.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img18.jpg' %}" alt="Steel Structure Construction">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img18.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Steel Structure Construction</a></h3>
+                                <span style="color: white;">Ongoing construction with structural steelwork.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img19.jpg' %}" alt="Equipment Transport">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img19.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Equipment Transport</a></h3>
+                                <span style="color: white;">Heavy-duty transport of industrial equipment.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img20.jpg' %}" alt="Industrial Equipment Loading">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img20.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Industrial Equipment Loading</a></h3>
+                                <span style="color: white;">Loading industrial equipment onto a truck.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat5">
+                        <div class="portfolio-wrapper">
+                            <div class="portfolio-thumb">
+                                <img src="{% static 'landing/img/portfolio/full/img21.jpg' %}" alt="Heavy-Duty Forklift">
+                            </div>
+                            <div class="portfolio-content">
+                                <div class="icon">
+                                    <a class="popup-img" href="{% static 'landing/img/portfolio/full/img21.jpg' %}"><span></span></a>
+                                </div>
+                                <h3><a href="#" style="color: white;">Heavy-Duty Forklift</a></h3>
+                                <span style="color: white;">High-capacity forklift ready for industrial lifting tasks.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row no-gutters">
+                   <div class="col-xl-12">
+                        <div class="view-project text-center mt-50">
+                            <a href="#" class="btn brand-btn">ALL PROJECTS</a>
+                        </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+        <!-- portfolio-area end -->
+
+        <!-- counter-area start -->
+        <div class="counter-area pt-75 pb-45" style="background-image:url('{% static 'landing/img/bg/bg-counter.jpg' %}')">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-3 col-lg-3 col-md-3">
+                        <div class="single-couter counter-2 d-xl-flex mb-30">
+                            <span>25</span>
+                            <p>YEARS OF <br> EXPERIENCE</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3">
+                        <div class="single-couter counter-2 d-xl-flex mb-30">
+                            <span>999+</span>
+                            <p>Machines <br> Rigged</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3">
+                        <div class="single-couter counter-2 d-xl-flex mb-30">
+                            <span>9</span>
+                            <p>COMPANIES <br> INSIDE OUR GROUP</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3">
+                        <div class="single-couter counter-2 d-xl-flex mb-30">
+                            <span>{{ visit_count }}+</span>
+                            <p>RELAXED & HAPPY <br> CLIENTS</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- counter-area end -->
+
+        <!-- footer start -->
+        <footer>
+            <!-- Brand Area Start -->
+            <div class="brand-area gray-bg">
+                <div class="container">
+                    <div class="brand-active brand-border pt-50 pb-50 d-flex justify-content-center">
+                        <div class="single-brand mx-3">
+                            <i class="fas fa-cogs fa-4x" style="color: #f39c12;"></i>
+                            <p>Engineering Services</p>
+                        </div>
+                        <div class="single-brand mx-3">
+                            <i class="fas fa-industry fa-4x" style="color: #27ae60;"></i>
+                            <p>Industrial Construction</p>
+                        </div>
+                        <div class="single-brand mx-3">
+                            <i class="fas fa-dolly-flatbed fa-4x" style="color: #2980b9;"></i>
+                            <p>Rigging & Installation</p>
+                        </div>
+                        <div class="single-brand mx-3">
+                            <i class="fas fa-microchip fa-4x" style="color: #8e44ad;"></i>
+                            <p>Automation Solutions</p>
+                        </div>
+                        <div class="single-brand mx-3">
+                            <i class="fas fa-wrench fa-4x" style="color: #c0392b;"></i>
+                            <p>Maintenance Services</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Brand Area End -->
+
+            <!-- Widget Area Start -->
+            <div class="widget-area gray-bg pt-60 pb-30">
+                <div class="container">
+                    <div class="row">
+
+
+			    <!-- Contact Us Start -->
+	    		    <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
+    				<div class="footer-widget">
+        			<h3>Contact Us</h3>
+        			<ul class="footer-info">
+					<li>
+                                                <a href="https://wa.me/528445065256" target="_blank" style="text-decoration: none; color: inherit;">
+                                                        <i class="fab fa-whatsapp"></i> +52 844 506 5256
+                                                </a>
+                                        </li>
+            				<li><i class="fas fa-phone"></i> +1 (123) 456-7890</li>
+            				<li><i class="fas fa-envelope"></i> customer-support@borbollagroup.com</li>
+            				<li><i class="fas fa-map-marker-alt"></i> 319 E. Coma Ave. Suite 274<br>Hidalgo, TX, USA, zip 78557</li>
+            				<li><i class="fas fa-clock"></i> Open hours: 8:00 AM - 6:00 PM Mon-Fri</li>
+        			</ul>
+    				</div>
+		    	    </div>
+			    <!-- Contact Us End -->
+
+
+
+                        <!-- Useful Links Start -->
+                        <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
+                            <div class="footer-widget">
+                                <h3>Useful Links</h3>
+                                <ul class="footer-link">
+                                    <li><a href="/">Home</a></li>
+                                    <li><a href="/">About Us</a></li>
+                                    <li><a href="/">Our Services</a></li>
+                                    <li><a href="/">Projects</a></li>
+                                    <li><a href="/">Careers</a></li>
+                                    <li><a href="/">Contact</a></li>
+                                    <li><a href="/">Privacy Policy</a></li>
+                                    <li><a href="/">Terms & Conditions</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Useful Links End -->
+
+			<!-- Newsletter Start -->
+			<div class="col-xl-4 col-lg-4 col-md-12 mb-30">
+    				<div class="footer-widget">
+        				<h3>Our Newsletter</h3>
+        				<p>Subscribe to our mailing list to receive the latest news and updates from our team.</p>
+        				<form action="" method="post" class="newsletter-form">
+            					{% csrf_token %}
+            					{{ form.email }}
+            					<button type="submit">Subscribe</button>
+        				</form>
+    				</div>
+			</div>
+			<!-- Newsletter End -->
+
+
+
+                    </div>
+                </div>
+            </div>
+            <!-- Widget Area End -->
+
+            <!-- Copyright Area Start -->
+            <div class="copyright-area pt-25 pb-25">
+                <div class="container">
+                    <div class="copyright-text text-center">
+                        <p>&copy; 2023 Borbolla Automation Incorporated. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Copyright Area End -->
+        </footer>
+        <!-- footer end -->
+
+        <!-- All js here -->
+        <script src="{% static 'landing/js/vendor/modernizr-3.5.0.min.js' %}"></script>
+        <script src="{% static 'landing/js/vendor/jquery-1.12.4.min.js' %}"></script>
+        <script src="{% static 'landing/js/popper.min.js' %}"></script>
+        <script src="{% static 'landing/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'landing/js/isotope.pkgd.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.magnific-popup.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.meanmenu.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.nice-select.min.js' %}"></script>
+        <script src="{% static 'landing/js/jquery.counterup.min.js' %}"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+        <script src="{% static 'landing/js/slick.min.js' %}"></script>
+        <script src="{% static 'landing/js/plugins.js' %}"></script>
+        <script src="{% static 'landing/js/main.js' %}"></script>
+    </body>
+</html>

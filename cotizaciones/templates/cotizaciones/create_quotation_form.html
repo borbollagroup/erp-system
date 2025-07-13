@@ -1,0 +1,265 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotation folio : {{ folio }}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #004085;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .dynamic-section {
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #004085;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .add-row button {
+            background-color: #004085;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-row button:hover {
+            background-color: #002654;
+        }
+
+        .remove-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .remove-button:hover {
+            background-color: #a71d2a;
+        }
+
+        .submit-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create Quotation</h1>
+        <form method="POST" action="{% url 'create_quotation' %}">
+            {% csrf_token %}
+            
+            <!-- Customer Selection -->
+            <div>
+                <label for="customer">Customer</label>
+                <select id="customer" name="customer_id" required>
+                    <option value="" disabled selected>-- Select a Customer --</option>
+                    {% for customer in customers %}
+                    <option value="{{ customer.id }}">{{ customer.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Quotation Details -->
+            <div>
+                <label for="project_name">Project Name</label>
+                <input type="text" id="project_name" name="project_name" required>
+
+                <label for="quotation_date">Quotation Date</label>
+                <input type="date" id="quotation_date" name="quotation_date" required>
+
+                <label for="start_date">Start Date</label>
+                <input type="date" id="start_date" name="start_date" required>
+
+                <label for="end_date">End Date</label>
+                <input type="date" id="end_date" name="end_date" required>
+
+                <label for="currency">Currency</label>
+                <select id="currency" name="currency" required>
+                    <option value="USD">USD</option>
+                    <option value="MXN">MXN</option>
+                </select>
+
+                <label for="exchange_rate">Exchange Rate</label>
+                <input type="number" step="0.01" id="exchange_rate" name="exchange_rate" required>
+
+                <label for="payment_terms">Payment Terms</label>
+                <input type="text" id="payment_terms" name="payment_terms" required>
+
+                <label for="validity_date">Validity Date</label>
+                <input type="date" id="validity_date" name="validity_date" required>
+            </div>
+
+            <!-- Dynamic Sections -->
+            {% for section in sections %}
+            <div class="dynamic-section">
+                <h3>{{ section|capfirst }}</h3>
+                <div class="add-row">
+                    <button type="button" onclick="addRow('{{ section }}')">+ Add Row</button>
+                </div>
+                <table id="{{ section }}-table">
+                    <thead>
+                        <tr>
+                            {% if section == "materials" %}
+                            <th>Material</th>
+                            <th>Specification</th>
+                            <th>Unit</th>
+                            <th>Quantity</th>
+                            <th>Unit Cost</th>
+                            <th>Remarks</th>
+                            <th>Action</th>
+                            {% elif section == "labors" %}
+                            <th>Item</th>
+                            <th>Worker Qty</th>
+                            <th>Work Days</th>
+                            <th>Unit Price</th>
+                            <th>Remarks</th>
+                            <th>Action</th>
+                            {% elif section == "equipments" %}
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Days</th>
+                            <th>Unit Price</th>
+                            <th>Remarks</th>
+                            <th>Action</th>
+                            {% elif section == "indirect_costs" %}
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            {% endfor %}
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-button">Create Quotation</button>
+        </form>
+    </div>
+
+    <script>
+        function addRow(section) {
+            const tableBody = document.querySelector(`#${section}-table tbody`);
+            let rowHtml = "";
+
+            if (section === "materials") {
+                rowHtml = `
+                    <tr>
+                        <td><input type="text" name="materials[][material]" required></td>
+                        <td><input type="text" name="materials[][specification]"></td>
+                        <td><input type="text" name="materials[][unit]" required></td>
+                        <td><input type="number" name="materials[][quantity]" required></td>
+                        <td><input type="number" step="0.01" name="materials[][unit_cost]" required></td>
+                        <td><input type="text" name="materials[][remarks]"></td>
+                        <td><button type="button" class="remove-button" onclick="removeRow(this)">Remove</button></td>
+                    </tr>`;
+            } else if (section === "labors") {
+                rowHtml = `
+                    <tr>
+                        <td><input type="text" name="labors[][item]" required></td>
+                        <td><input type="number" name="labors[][worker_qty]" required></td>
+                        <td><input type="number" name="labors[][work_days]" required></td>
+                        <td><input type="number" step="0.01" name="labors[][unit_price]" required></td>
+                        <td><input type="text" name="labors[][remarks]"></td>
+                        <td><button type="button" class="remove-button" onclick="removeRow(this)">Remove</button></td>
+                    </tr>`;
+            } else if (section === "equipments") {
+                rowHtml = `
+                    <tr>
+                        <td><input type="text" name="equipments[][description]" required></td>
+                        <td><input type="number" name="equipments[][quantity]" required></td>
+                        <td><input type="number" name="equipments[][days]" required></td>
+                        <td><input type="number" step="0.01" name="equipments[][unit_price]" required></td>
+                        <td><input type="text" name="equipments[][remarks]"></td>
+                        <td><button type="button" class="remove-button" onclick="removeRow(this)">Remove</button></td>
+                    </tr>`;
+            } else if (section === "indirect_costs") {
+                rowHtml = `
+                    <tr>
+                        <td><input type="text" name="indirect_costs[][description]" required></td>
+                        <td><input type="number" step="0.01" name="indirect_costs[][amount]" required></td>
+                        <td><button type="button" class="remove-button" onclick="removeRow(this)">Remove</button></td>
+                    </tr>`;
+            }
+
+            tableBody.insertAdjacentHTML("beforeend", rowHtml);
+        }
+
+        function removeRow(button) {
+            button.closest("tr").remove();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; color: #333333; }
+        .container { width: 80%; margin: auto; background-color: #f9f9f9; padding: 20px; border-radius: 8px; }
+        .header { text-align: center; padding: 20px; background-color: #004080; color: white; }
+        .content { padding: 20px; line-height: 1.6; color: #333333; }
+        .section { margin-bottom: 20px; }
+        .footer { text-align: center; font-size: 12px; color: #777777; padding: 10px; background-color: #eeeeee; border-top: 1px solid #dddddd; }
+        .logo { width: auto; max-width: 300px; height: auto; }
+        .section-title { font-weight: bold; color: #004080; margin-bottom: 10px; }
+        .info-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .info-table th, .info-table td { padding: 8px; border: 1px solid #dddddd; text-align: left; }
+        .info-table th { background-color: #004080; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <img src="cid:logo_cid" alt="Company Logo" class="logo">
+            <h1>Quotation Sheet - {{ project_info.project_name }}</h1>
+            <h2>Folio Number: {{ header.folio }}</h2>
+        </div>
+        
+
+        <!-- Message Content -->
+        <div class="content">
+            <p>Dear {{ client_info.manager }},</p>
+            <p>We are pleased to present you with the quotation for your project, "<strong>{{ project_info.project_name }}</strong>." Below (attached) you will find the detailed  quotation. Should you have any questions or require further clarifications, please do not hesitate to reach out.</p>
+
+            <!-- Client Information Section -->
+            <div class="section">
+                <p class="section-title">Customer Information</p>
+                <table class="info-table">
+                    <tr><th>Client Name</th><td>{{ client_info.client_name }}</td></tr>
+                    <tr><th>Address</th><td>{{ client_info.address }}</td></tr>
+                    <tr><th>Country</th><td>{{ client_info.country_name }}</td></tr>
+                    <tr><th>Contact</th><td>{{ client_info.contact }}</td></tr>
+                </table>
+            </div>
+
+            <!-- Project Information Section -->
+            <div class="section">
+                <p class="section-title">Project Information</p>
+                <table class="info-table">
+                    <tr><th>Quotation Number</th><td>{{ project_info.quotation_number }}</td></tr>
+                    
+                    <tr><th>Project Start Date (Proposed)</th><td>{{ project_info.project_start }}</td></tr>
+                    <tr><th>Project End Date (Proposed)</th><td>{{ project_info.project_end }}</td></tr>
+                    <tr><th>Project Description</th><td>{{ project_info.description }}</td></tr>
+                </table>
+            </div>
+
+            <!-- Financial Information Section -->
+            <div class="section">
+                <p class="section-title">Financial Information</p>
+                <table class="info-table">
+                    <tr><th>Currency</th><td>{{ financial_info.currency }}</td></tr>
+                    <tr><th>Tax Rate</th><td>{{ financial_info.tax_rate }}</td></tr>
+
+                    <tr><th>Materials</th><td>{{ financial_info.materials }}</td></tr>
+                    <tr><th>Labor</th><td>{{ financial_info.labor }}</td></tr>
+                    <tr><th>Equipments</th><td>{{ financial_info.equipment }}</td></tr>
+                    <tr><th>Overhead</th><td>{{ financial_info.overhead }}</td></tr>
+                    <tr><th>project total (before vat)</th><td><h2>{{ financial_info.total }}</h2></td></tr>
+                    <tr><th>Total Cost (Incl. VAT)</th><td>{{ financial_info.total_incl_iva }}</td></tr>
+                    
+                </table>
+            </div>
+
+            
+
+            
+
+            <p>Thank you for considering us for your project needs. We look forward to a successful partnership and are committed to delivering the highest quality services and products to meet your expectations.</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Borbolla Group | 319 E. Coma Ave. suite 274 Hidalgo , TX , USA ZIP 78557</p>
+            <p>Contact us at: customer-support@borbollagroup.com | Phone: +52 81 1008 7616</p>
+        </div>
+    </div>
+</body>
+</html>

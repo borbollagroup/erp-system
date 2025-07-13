@@ -1,0 +1,37 @@
+{% extends "landing/EN/base_blank.html" %}
+{% load static %}
+{% block content %}
+<div class="features-area gray-bg pt-175 pb-70">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ object.title }}</h5>
+                        <div class="d-flex align-items-center mb-3">
+                            <img class="rounded-circle mr-3" src="{{ object.author.profile.image.url }}" alt="Author's profile picture" height="50" width="50">
+                            <div>
+                                <h6 class="card-subtitle mb-0"><a href="{% url 'user-posts' object.author.username %}" class="card-link">{{ object.author.username }}</a></h6>
+                                <small class="text-muted">{{ object.date_posted }}</small>
+                                {% if object.author == user %}
+                                    <div class="mt-1">
+                                        <a class="btn btn-secondary btn-sm" href="{% url 'post-update' object.id %}">Update</a>
+                                        <a class="btn btn-danger btn-sm" href="{% url 'post-delete' object.id %}">Delete</a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p class="card-text flex-grow-1">{{ object.content }}</p>
+                        {% if object.attached %}
+                        <hr>
+                        <p class="card-text">
+                            <a href="{{ object.attached.url }}" target="_blank">Download Attachment</a>
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

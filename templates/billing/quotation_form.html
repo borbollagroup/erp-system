@@ -1,0 +1,292 @@
+{% extends "reportes/base.html" %}
+{% load static widget_tweaks %}
+{% block title %}{% if object %}Edit{% else %}New{% endif %} Quotation{% endblock %}
+{% block header_subtitle %}Create or edit quotation with ease{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <form method="post" novalidate class="needs-validation" id="quotation-form">
+    {% csrf_token %}
+    {# render the hidden 'number' field so UpdateView.validate() will see it #}
+    {% if object %}
+      {% render_field form.number type="hidden" %}
+    {% endif %}
+
+    <div class="row g-3">
+      <!-- Quotation Information -->
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header bg-light"><h5 class="mb-0">Quotation Information</h5></div>
+          <div class="card-body">
+            <div class="row gy-2 gx-3">
+              <!-- Type -->
+              <div class="col-6 col-md-3">
+                <label for="id_quote_type" class="form-label">Type</label>
+                {% render_field form.quote_type class="form-select" %}
+                {% for e in form.quote_type.errors %}
+                  <div class="invalid-feedback">{{ e }}</div>
+                {% endfor %}
+              </div>
+              <!-- Currency -->
+              <div class="col-6 col-md-3">
+                <label for="id_coin" class="form-label">Currency</label>
+                {% render_field form.coin class="form-select" %}
+                {% for e in form.coin.errors %}
+                  <div class="invalid-feedback">{{ e }}</div>
+                {% endfor %}
+              </div>
+              <!-- Client -->
+              <div class="col-6 col-md-3" id="div_id_client">
+                <label for="id_client" class="form-label">Client</label>
+                {% render_field form.client class="form-select" %}
+                {% for e in form.client.errors %}
+                  <div class="invalid-feedback">{{ e }}</div>
+                {% endfor %}
+              </div>
+              <!-- Supplier -->
+              <div class="col-6 col-md-3" id="div_id_supplier" style="display:none;">
+                <label for="id_supplier" class="form-label">Supplier</label>
+                {% render_field form.supplier class="form-select" %}
+                {% for e in form.supplier.errors %}
+                  <div class="invalid-feedback">{{ e }}</div>
+                {% endfor %}
+              </div>
+              <!-- Project -->
+              <div class="col-12 col-md-4">
+                <label for="id_project" class="form-label">
+                  Project <a href="{% url 'reportes:project_add' %}" target="_blank">➕</a>
+                </label>
+                {% render_field form.project class="form-select" %}
+                {% for e in form.project.errors %}
+                  <div class="invalid-feedback">{{ e }}</div>
+                {% endfor %}
+              </div>
+              <!-- Notify Contacts -->
+              <div class="col-12 col-md-6">
+                <label for="id_notify_contacts" class="form-label">Notify Contacts</label>
+                {% render_field form.notify_contacts class="form-select" %}
+                {% for e in form.notify_contacts.errors %}
+                  <div class="invalid-feedback">{{ e }}</div>
+                {% endfor %}
+                <div class="form-text">
+                  Hold down <kbd>Ctrl</kbd> (Windows) or <kbd>⌘</kbd> (Mac) to select multiple.
+                </div>
+              </div>
+
+              <!-- Quotation # display -->
+              <div class="col-12 col-md-4">
+                <label class="form-label">Quotation #</label>
+                <input type="text" readonly class="form-control-plaintext"
+                       value="{% if object %}QT-{{ object.client.legal_name }}-{{ 11348|add:object.pk }}-{{ object.date_issued|date:'ymd' }}{% else %}(will generate on save){% endif %}">
+              </div>
+              <!-- Date Issued -->
+              <div class="col-6 col-md-4">
+                <label for="id_date_issued" class="form-label">Date Issued</label>
+                {% render_field form.date_issued class="form-control" type="date" %}
+                {% for e in form.date_issued.errors %}
+                  <div class="invalid-feedback">{{ e }}</div>
+                {% endfor %}
+              </div>
+              <!-- Valid Until -->
+              <div class="col-6 col-md-4">
+                <label for="id_valid_until" class="form-label">Valid Until</label>
+                {% render_field form.valid_until class="form-control" type="date" %}
+                {% for e in form.valid_until.errors %}
+                  <div class="invalid-feedback">{{ e }}</div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Line Items -->
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Line Items</h5>
+            <button type="button" id="add-item" class="btn btn-sm btn-outline-primary">Add Item</button>
+          </div>
+          <div class="card-body p-0 table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th style="width:15%">Category</th>
+                  <th>Description</th>
+                  <th style="width:10%">Qty</th>
+                  <th style="width:10%">Days</th>
+                  <th style="width:15%">Unit Price</th>
+                  <th style="width:15%">Total</th>
+                  <th style="width:15%">Remarks</th>
+                  <th></th>
+                </tr>
+              </thead>
+              {{ item_formset.management_form }}
+              <tbody id="item-table-body">
+                {% for form in item_formset.forms %}
+                  <tr class="item-row">
+                    {% for hidden in form.hidden_fields %}
+                      {{ hidden }}
+                    {% endfor %}
+                    <td>{% render_field form.category class="form-select form-select-sm" %}</td>
+                    <td>{% render_field form.description class="form-control form-control-sm" %}</td>
+                    <td>{% render_field form.qty class="form-control form-control-sm text-end" %}</td>
+                    <td>{% render_field form.days class="form-control form-control-sm text-end" %}</td>
+                    <td>{% render_field form.unit_price class="form-control form-control-sm text-end" %}</td>
+                    <td class="text-end align-middle total-cell">0</td>
+                    <td>{% render_field form.remarks class="form-control form-control-sm" %}</td>
+                    <td class="text-center align-middle">
+                      <button type="button" class="btn btn-sm btn-outline-danger remove-item">×</button>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="5" class="text-end fw-bold">Grand Total:</td>
+                  <td id="grand-total" class="text-end fw-bold">0</td>
+                  <td colspan="2"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="col-12 text-end">
+        <button type="submit" class="btn btn-success btn-lg">Save Quotation</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(function(){
+  var $qt         = $('#id_quote_type'),
+      $client     = $('#id_client'),
+      $project    = $('#id_project'),
+      $contacts   = $('#id_notify_contacts'),
+      $clientBox  = $('#div_id_client'),
+      $supplier   = $('#div_id_supplier'),
+      $dateI      = $('#id_date_issued'),
+      $dateU      = $('#id_valid_until'),
+      $body       = $('#item-table-body'),
+      $grand      = $('#grand-total'),
+      $totalForms = $('input[name$="-TOTAL_FORMS"]');
+
+  function toggleParty(){
+    $clientBox.toggle($qt.val()==='out');
+    $supplier.toggle($qt.val()==='in');
+  }
+
+  function loadProjects(){
+    var url     = "{% url 'billing:project_list_json' %}",
+        data    = {},
+        current = $project.val();
+    if ($client.val()){
+      data.client = $client.val();
+    }
+    $project.empty().append('<option value="">---------</option>');
+    $.getJSON(url, data)
+     .done(function(list){
+       $.each(list, function(_, p){
+         var $opt = $('<option>')
+           .val(p.id)
+           .text(p.name + (p.contract_number ? ' ('+p.contract_number+')' : ''));
+         if (p.id == current) $opt.prop('selected', true);
+         $project.append($opt);
+       });
+     });
+  }
+
+  function loadContacts(){
+    var url  = "{% url 'billing:client_contacts_json' %}",
+        data = { client: $client.val() },
+        sel  = $contacts.val();  // remember any pre-selected on edit
+    $contacts.empty();
+    $.getJSON(url, data)
+     .done(function(list){
+       $.each(list, function(_, c){
+         var $opt = $('<option>')
+           .val(c.id)
+           .text(c.name + ' <' + c.email + '>');
+         if (sel && sel.indexOf(String(c.id)) !== -1) {
+           $opt.prop('selected', true);
+         }
+         $contacts.append($opt);
+       });
+     });
+  }
+
+  function syncValidity(){
+    var v = $dateI.val();
+    if (!v) return;
+    var d = new Date(v);
+    d.setDate(d.getDate()+15);
+    $dateU.val(d.toISOString().substr(0,10));
+  }
+
+  function comma(n){
+    return (+n).toLocaleString();
+  }
+
+  function recalcRow($r){
+    var q = parseFloat($r.find('[name$="-qty"]').val())        || 0,
+        d = parseFloat($r.find('[name$="-days"]').val())       || 0,
+        u = parseFloat($r.find('[name$="-unit_price"]').val()) || 0,
+        t = q*d*u;
+    $r.find('.total-cell').text(comma(t.toFixed(2)));
+    return t;
+  }
+
+  function recalcAll(){
+    var sum = 0;
+    $body.find('.item-row').each(function(){
+      sum += recalcRow($(this));
+    });
+    $grand.text(comma(sum.toFixed(2)));
+  }
+
+  // wire events
+  $qt.change(function(){
+    toggleParty();
+    loadProjects();
+    loadContacts();
+  });
+  $client.change(function(){
+    loadProjects();
+    loadContacts();
+  });
+  $dateI.change(syncValidity);
+  $body.on('input','input,select', recalcAll);
+  $body.on('click','.remove-item', function(){
+    $(this).closest('tr').remove();
+    recalcAll();
+  });
+  $('#add-item').click(function(){
+    var cnt    = parseInt($totalForms.val(),10),
+        $first = $body.find('tr.item-row:first'),
+        $new   = $first.clone();
+    $totalForms.val(cnt+1);
+    $new.find('input,select').each(function(){
+      var name = $(this).attr('name').replace(/-\d+-/,'-'+cnt+'-'),
+          id   = 'id_'+name;
+      $(this).attr({name: name, id: id}).val('');
+    });
+    $body.append($new);
+    recalcAll();
+  });
+
+  // initial setup (both create & edit)
+  toggleParty();
+  loadProjects();
+  loadContacts();
+  syncValidity();
+  recalcAll();
+});
+</script>
+{% endblock %}

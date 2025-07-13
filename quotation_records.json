@@ -1,0 +1,320 @@
+{
+    "client_info": {
+        "client_name": "[NOMBRE DE PROYECTO]",
+        "address": "{DIRECCION}",
+        "country_name": "MEX",
+        "manager": "Ing Fernando del Bosque",
+        "contact": "ruben.campo@borbollagroup.co",
+        "distance_km": "0"
+    },
+    "project_info": {
+        "quotation_number": "Q-98789",
+        "quotation_date": "2024-11-01",
+        "project_name": "PROYECTO1",
+        "project_start": "2024-11-01",
+        "project_end": "2024-11-30",
+        "description": "JFJOIFJOSFJISODJFIOPSJFOISDJFPOSIDJFSDF"
+    },
+    "financial_info": {
+        "currency": "USD",
+        "exchange_rate": "0",
+        "tax_rate": "16%"
+    },
+    "header": {
+        "logo_path": "logo_group.jpeg",
+        "title": "Quotation Sheet",
+        "folio": "568027"
+    },
+    "personnel": [
+        {
+            "role": "Worker",
+            "quantity": 1,
+            "unit_price": 70
+        },
+        {
+            "role": "Supervisor",
+            "quantity": 0,
+            "unit_price": 100
+        }
+    ],
+    "material": [
+        {
+            "category": "Tubo",
+            "specification": "\u00bd Pulgada",
+            "quantity": 1,
+            "unit_price": 470.76,
+            "remarks": ""
+        },
+        {
+            "category": "Tubo",
+            "specification": "\u00be Pulgada",
+            "quantity": 2,
+            "unit_price": 525.93,
+            "remarks": ""
+        },
+        {
+            "category": "Tubo",
+            "specification": "1 Pulgada",
+            "quantity": 3,
+            "unit_price": 717.09,
+            "remarks": ""
+        },
+        {
+            "category": "Tubo",
+            "specification": "1\u00bd Pulgada",
+            "quantity": 4,
+            "unit_price": 1214,
+            "remarks": ""
+        },
+        {
+            "category": "Tubo",
+            "specification": "2 Pulgada",
+            "quantity": 5,
+            "unit_price": 1557.83,
+            "remarks": ""
+        },
+        {
+            "category": "Codo",
+            "specification": "\u00bd Pulgada",
+            "quantity": 6,
+            "unit_price": 5.5,
+            "remarks": ""
+        },
+        {
+            "category": "Codo",
+            "specification": "\u00be Pulgada",
+            "quantity": 7,
+            "unit_price": 14.36,
+            "remarks": ""
+        },
+        {
+            "category": "Codo",
+            "specification": "1 Pulgada",
+            "quantity": 8,
+            "unit_price": 14.7,
+            "remarks": "FDGFSDGF"
+        },
+        {
+            "category": "Codo",
+            "specification": "1\u00bd Pulgada",
+            "quantity": 9,
+            "unit_price": 29.8,
+            "remarks": ""
+        },
+        {
+            "category": "Codo",
+            "specification": "2 Pulgada",
+            "quantity": 10,
+            "unit_price": 43.2,
+            "remarks": ""
+        },
+        {
+            "category": "cople / niple",
+            "specification": "\u00bd Pulgada",
+            "quantity": 11,
+            "unit_price": 4.69,
+            "remarks": ""
+        },
+        {
+            "category": "cople / niple",
+            "specification": "\u00be Pulgada",
+            "quantity": 12,
+            "unit_price": 5.79,
+            "remarks": ""
+        },
+        {
+            "category": "cople / niple",
+            "specification": "1 Pulgada",
+            "quantity": 13,
+            "unit_price": 8.33,
+            "remarks": ""
+        },
+        {
+            "category": "cople / niple",
+            "specification": "1\u00bd Pulgada",
+            "quantity": 14,
+            "unit_price": 18.5,
+            "remarks": ""
+        },
+        {
+            "category": "cople / niple",
+            "specification": "2 Pulgada",
+            "quantity": 15,
+            "unit_price": 21.23,
+            "remarks": ""
+        },
+        {
+            "category": "valvula",
+            "specification": "\u00bd Pulgada",
+            "quantity": 16,
+            "unit_price": 54.16,
+            "remarks": ""
+        },
+        {
+            "category": "valvula",
+            "specification": "\u00be Pulgada",
+            "quantity": 17,
+            "unit_price": 87.79,
+            "remarks": ""
+        },
+        {
+            "category": "valvula",
+            "specification": "1 Pulgada",
+            "quantity": 18,
+            "unit_price": 134.76,
+            "remarks": ""
+        },
+        {
+            "category": "valvula",
+            "specification": "1\u00bd Pulgada",
+            "quantity": 19,
+            "unit_price": 258,
+            "remarks": ""
+        },
+        {
+            "category": "valvula",
+            "specification": "2 Pulgada",
+            "quantity": 20,
+            "unit_price": 442.76,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "250 SQ (500 MCM)",
+            "quantity": 21,
+            "unit_price": 781.7,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "150 SQ (300 MCM)",
+            "quantity": 22,
+            "unit_price": "",
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "50 SQ (1/0 AWG)",
+            "quantity": 23,
+            "unit_price": 161.9,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "35 SQ (2 AWG)",
+            "quantity": 24,
+            "unit_price": 102,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "32 SQ (4 AWG)",
+            "quantity": 25,
+            "unit_price": 66.2,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "16 SQ (6 AWG)",
+            "quantity": 26,
+            "unit_price": 42.1,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "10 SQ (8 AWG)",
+            "quantity": 27,
+            "unit_price": 26.1,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "6 SQ (10 AWG)",
+            "quantity": 28,
+            "unit_price": 16,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "4 SQ (12 AWG)",
+            "quantity": 29,
+            "unit_price": 12.2,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "16 SQ+4G(4/6 AWG)",
+            "quantity": 30,
+            "unit_price": 289.4,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "10 SQ+4G(4/8 AWG)",
+            "quantity": 31,
+            "unit_price": 181.3,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "6 SQ+4G(4/10 AWG)",
+            "quantity": 32,
+            "unit_price": 95.3,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "4 SQ+3G(3/12 AWG)",
+            "quantity": 33,
+            "unit_price": 43.2,
+            "remarks": ""
+        },
+        {
+            "category": "Cable",
+            "specification": "4 SQ+4G(4/12 AWG)",
+            "quantity": 555,
+            "unit_price": 60.8,
+            "remarks": ""
+        },
+        {
+            "category": "Interruptor",
+            "specification": "Interruptor",
+            "quantity": 166,
+            "unit_price": 13000,
+            "remarks": ""
+        }
+    ],
+    "overhead": [
+        {
+            "category": "Equipment",
+            "description": "LIFT EQUIPMENT",
+            "quantity": 5,
+            "unit_price": 1500,
+            "days_used": 30
+        },
+        {
+            "category": "Equipment",
+            "description": "FORKLIFT 7.5T",
+            "quantity": 1,
+            "unit_price": 5900,
+            "days_used": 30
+        },
+        {
+            "category": "Equipment",
+            "description": "FORKLIFT 15T",
+            "quantity": 1,
+            "unit_price": 12500,
+            "days_used": 30
+        },
+        {
+            "category": "Equipment",
+            "description": "CRANE 30T",
+            "quantity": 1,
+            "unit_price": 19000,
+            "days_used": 15
+        }
+    ],
+    "footer": {
+        "qr_code_path": "/home/borbolla/borbolla_webpage/facturador/management/commands/qr.jpg"
+    }
+}

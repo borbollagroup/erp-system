@@ -1,0 +1,13 @@
+Quotation {{ quotation.number }}
+
+Dear {{ quotation.client.legal_name }},
+
+Please review your quotation at the link below:
+
+  {{ link }}
+
+If your mail client does not support HTML, you can copy and paste the URL above into your browser.
+
+Thank you for choosing Borbolla.
+
+— Borbolla Automation Team
